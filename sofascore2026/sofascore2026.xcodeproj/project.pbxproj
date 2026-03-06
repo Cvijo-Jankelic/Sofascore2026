@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D2AD15102F599A9D006EC179 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D2AD150F2F599A9D006EC179 /* SnapKit */; };
-		D2AD15122F599A9D006EC179 /* SnapKit-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = D2AD15112F599A9D006EC179 /* SnapKit-Dynamic */; };
+		D20AA8682F5AA54B00F8DD8E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D20AA8672F5AA54B00F8DD8E /* SnapKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,8 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D2AD15102F599A9D006EC179 /* SnapKit in Frameworks */,
-				D2AD15122F599A9D006EC179 /* SnapKit-Dynamic in Frameworks */,
+				D20AA8682F5AA54B00F8DD8E /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,8 +83,7 @@
 			);
 			name = sofascore2026;
 			packageProductDependencies = (
-				D2AD150F2F599A9D006EC179 /* SnapKit */,
-				D2AD15112F599A9D006EC179 /* SnapKit-Dynamic */,
+				D20AA8672F5AA54B00F8DD8E /* SnapKit */,
 			);
 			productName = sofascore2026;
 			productReference = D2AD14F62F599A3E006EC179 /* sofascore2026.app */;
@@ -117,7 +114,7 @@
 			mainGroup = D2AD14ED2F599A3E006EC179;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				D2AD150E2F599A9D006EC179 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				D20AA8662F5AA54B00F8DD8E /* XCRemoteSwiftPackageReference "SnapKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D2AD14F72F599A3E006EC179 /* Products */;
@@ -164,6 +161,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -195,6 +193,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -355,9 +354,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		D2AD150E2F599A9D006EC179 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		D20AA8662F5AA54B00F8DD8E /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 5.7.1;
@@ -366,15 +365,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		D2AD150F2F599A9D006EC179 /* SnapKit */ = {
+		D20AA8672F5AA54B00F8DD8E /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D2AD150E2F599A9D006EC179 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = D20AA8662F5AA54B00F8DD8E /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
-		};
-		D2AD15112F599A9D006EC179 /* SnapKit-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = D2AD150E2F599A9D006EC179 /* XCRemoteSwiftPackageReference "SnapKit" */;
-			productName = "SnapKit-Dynamic";
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
