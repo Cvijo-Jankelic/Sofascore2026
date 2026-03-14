@@ -1,0 +1,22 @@
+//
+//  MatchModel.swift
+//  sofascore2026
+//
+//  Created by akademija on 12.03.2026..
+//
+
+import UIKit
+
+struct MatchModel {
+    let timeText: String
+    let statusText: String
+    let homeTeamName: String
+    let awayTeamName: String
+    let homeScore: String?
+    let awayScore: String?
+    let scoreColor: UIColor
+    let homeTeamColor: UIColor
+    let awayTeamColor: UIColor
+    let homeTeamLogoUrl: URL?
+    let awayTeamLogoUrl: URL?
+}
