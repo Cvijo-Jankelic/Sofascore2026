@@ -35,14 +35,13 @@ class HeaderLeagueView: BaseView {
         arrowLabel.textColor = .secondaryText
 
         leagueNameLabel.font = .leagueName
-        leagueNameLabel.font = .systemFont(ofSize: 14)
         leagueNameLabel.textColor = .secondaryText
         leagueNameLabel.numberOfLines = 1
     }
 
     override func setupConstraints() {
         logoImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(24)
             $0.width.height.equalTo(32)
             $0.top.equalToSuperview().offset(12)
             $0.bottom.equalToSuperview().offset(-12)

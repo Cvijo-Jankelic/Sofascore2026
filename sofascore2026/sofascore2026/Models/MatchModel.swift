@@ -4,8 +4,7 @@
 //
 //  Created by akademija on 12.03.2026..
 //
-
-import UIKit
+import Foundation
 
 struct MatchModel {
     let timeText: String
@@ -14,9 +13,6 @@ struct MatchModel {
     let awayTeamName: String
     let homeScore: String?
     let awayScore: String?
-    let scoreColor: UIColor
-    let homeTeamColor: UIColor
-    let awayTeamColor: UIColor
     let homeTeamLogoUrl: URL?
     let awayTeamLogoUrl: URL?
 }

@@ -25,7 +25,7 @@ class HomeViewController: UIViewController {
 
         stackView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview().offset(6)
+            $0.leading.trailing.equalToSuperview().inset(0)
         }
     }
 
@@ -38,7 +38,7 @@ class HomeViewController: UIViewController {
         let events = dataSource.laLigaEvents()
         events.forEach { event in
             let matchRowView = MatchRowView()
-            matchRowView.configure(with: makeMatchModel(from: event))
+            matchRowView.configure(with: makeMatchModel(from: event), event: event)
             stackView.addArrangedSubview(matchRowView)
         }
     }
@@ -59,9 +59,6 @@ class HomeViewController: UIViewController {
             awayTeamName: event.awayTeam.name,
             homeScore: event.homeScore.map { "\($0)" },
             awayScore: event.awayScore.map { "\($0)" },
-            scoreColor: event.scoreColor,
-            homeTeamColor: event.homeTeamColor,
-            awayTeamColor: event.awayTeamColor,
             homeTeamLogoUrl: URL(string: event.homeTeam.logoUrl ?? ""),
             awayTeamLogoUrl: URL(string: event.awayTeam.logoUrl ?? "")
         )

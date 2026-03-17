@@ -8,13 +8,18 @@
 import UIKit
 import SofaAcademic
 
+
 extension Event {
     var timeText: String {
-        let date = Date(timeIntervalSince1970: Double(startTimestamp))
+        Event.dateTimeFormatter.string(from: Date(timeIntervalSince1970: Double(startTimestamp)))
+    }
+    
+    private static let dateTimeFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm"
-        return formatter.string(from: date)
-    }
+        return formatter
+        
+    }()
     
     var statusText: String{
         switch status {
@@ -26,23 +31,4 @@ extension Event {
             return "\(Int(elapsed / 60))'"
         }
     }
-    
-    var scoreColor: UIColor {
-        status == .inProgress ? .liveRed : .primaryText
-    }
-    
-    var homeTeamColor: UIColor {
-        guard status == .finished,
-              let home = homeScore,
-              let away = awayScore else { return .primaryText }
-        return home < away ? .secondaryText : .primaryText
-    }
-    
-    var awayTeamColor: UIColor {
-        guard status == .finished,
-              let home = homeScore,
-              let away = awayScore else { return .primaryText }
-        return away < home ? .secondaryText : .primaryText
-    }
-    
 }
