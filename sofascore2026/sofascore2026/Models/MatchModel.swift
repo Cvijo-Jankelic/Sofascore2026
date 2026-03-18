@@ -13,6 +13,6 @@ struct MatchModel {
     let awayTeamName: String
     let homeScore: String?
     let awayScore: String?
-    let homeTeamLogoUrl: URL?
-    let awayTeamLogoUrl: URL?
+    let homeTeamLogoUrl: String?
+    let awayTeamLogoUrl: String?
 }

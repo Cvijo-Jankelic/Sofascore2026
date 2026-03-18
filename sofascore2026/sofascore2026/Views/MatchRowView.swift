@@ -129,9 +129,8 @@ class MatchRowView: BaseView {
         homeTeamNameLabel.textColor = MatchViewHelper.teamColor(for: event, side: .home)
         awayTeamNameLabel.textColor = MatchViewHelper.teamColor(for: event, side: .away)
 
-        
-        homeClubImageView.loadImage(from: model.homeTeamLogoUrl)
-        awayClubImageView.loadImage(from: model.awayTeamLogoUrl)
+        setImage(for: homeClubImageView, urlString: model.homeTeamLogoUrl)
+        setImage(for: awayClubImageView, urlString: model.awayTeamLogoUrl)
     }
     
     private func setupMatchTimeLabel() {
@@ -168,6 +167,10 @@ class MatchRowView: BaseView {
     private func setupImageViews() {
         homeClubImageView.contentMode = .scaleAspectFit
         awayClubImageView.contentMode = .scaleAspectFit
+    }
+    
+    func setImage(for imageView: UIImageView, urlString: String?) {
+        imageView.loadImage(from: URL(string: urlString ?? ""))
     }
     
 }

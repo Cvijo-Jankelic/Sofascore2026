@@ -59,8 +59,8 @@ class HomeViewController: UIViewController {
             awayTeamName: event.awayTeam.name,
             homeScore: event.homeScore.map { "\($0)" },
             awayScore: event.awayScore.map { "\($0)" },
-            homeTeamLogoUrl: URL(string: event.homeTeam.logoUrl ?? ""),
-            awayTeamLogoUrl: URL(string: event.awayTeam.logoUrl ?? "")
+            homeTeamLogoUrl: event.homeTeam.logoUrl ?? "",
+            awayTeamLogoUrl: event.awayTeam.logoUrl ?? ""
         )
     }
 }
