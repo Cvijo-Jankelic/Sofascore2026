@@ -9,23 +9,28 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupStackView()
+        addViews()
+        styleView()
+        setupConstraints()
         configure()
     }
+    
+    private func addViews(){
+        view.addSubview(stackView)
 
-    private func setupView() {
-        view.backgroundColor = .white
     }
 
-    private func setupStackView() {
-        view.addSubview(stackView)
+    private func styleView() {
+        view.backgroundColor = .white
         stackView.axis = .vertical
         stackView.spacing = 0
+        stackView.alignment = .fill
+    }
 
+    private func setupConstraints() {
         stackView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview().inset(0)
+            $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
     }
 

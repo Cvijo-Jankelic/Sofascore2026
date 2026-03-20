@@ -11,7 +11,7 @@ import SnapKit
 
 class MatchRowView: BaseView {
     
-    
+    private let timeStatusContainer = UIView()
     private let matchTimeLabel = UILabel()
     private let matchStatusLabel = UILabel()
     private let separatorView = UIView()
@@ -22,11 +22,10 @@ class MatchRowView: BaseView {
     private let homeScoreLabel = UILabel()
     private let awayScoreLabel = UILabel()
     
-    private let timeStatusContainer = UIView()
-
-    
     
     override func addViews() {
+        
+        addSubview(timeStatusContainer)
         timeStatusContainer.addSubview(matchTimeLabel)
         timeStatusContainer.addSubview(matchStatusLabel)
         
@@ -37,7 +36,6 @@ class MatchRowView: BaseView {
         addSubview(awayTeamNameLabel)
         addSubview(homeScoreLabel)
         addSubview(awayScoreLabel)
-        addSubview(timeStatusContainer)
     }
     
     override func styleViews() {
@@ -54,63 +52,66 @@ class MatchRowView: BaseView {
     override func setupConstraints() {
         
         timeStatusContainer.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(8)
-            $0.top.equalToSuperview().offset(8)
+            $0.leading.top.bottom.equalToSuperview()
             $0.width.equalTo(64)
-            $0.height.equalTo(56)
         }
         
         matchTimeLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(8)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview().inset(10)
+            $0.leading.trailing.equalToSuperview().inset(4)
             $0.height.equalTo(16)
         }
 
         matchStatusLabel.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(4)
             $0.top.equalTo(matchTimeLabel.snp.bottom).offset(4)
-            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(10)
             $0.height.equalTo(16)
         }
         
         separatorView.snp.makeConstraints {
-            $0.leading.equalTo(timeStatusContainer.snp.trailing).offset(8)
-            $0.top.equalToSuperview().offset(4)
-            $0.bottom.equalToSuperview().offset(-4)
+            $0.leading.equalTo(timeStatusContainer.snp.trailing)
+            $0.top.bottom.equalToSuperview().inset(8)
             $0.width.equalTo(1)
         }
         
         homeClubImageView.snp.makeConstraints {
-            $0.leading.equalTo(separatorView.snp.trailing).offset(12)
-            $0.top.equalToSuperview().offset(8)
-            $0.width.height.equalTo(20)
+            $0.leading.equalTo(separatorView.snp.trailing).offset(16)
+            $0.top.equalToSuperview().inset(10)
+            $0.size.equalTo(16)
         }
         
         awayClubImageView.snp.makeConstraints {
             $0.leading.equalTo(homeClubImageView)
-            $0.top.equalTo(homeClubImageView.snp.bottom).offset(8)
-            $0.width.height.equalTo(20)
+            $0.bottom.equalToSuperview().inset(10)
+            $0.size.equalTo(16)
         }
         
         homeTeamNameLabel.snp.makeConstraints {
             $0.leading.equalTo(homeClubImageView.snp.trailing).offset(8)
-            $0.centerY.equalTo(homeClubImageView)
+            $0.centerY.equalTo(homeClubImageView.snp.centerY)
             $0.trailing.lessThanOrEqualTo(homeScoreLabel.snp.leading).offset(-16)
+            $0.height.equalTo(16)
         }
         
         awayTeamNameLabel.snp.makeConstraints {
             $0.leading.equalTo(awayClubImageView.snp.trailing).offset(8)
             $0.centerY.equalTo(awayClubImageView)
-            $0.bottom.equalToSuperview().offset(-8)
             $0.trailing.lessThanOrEqualTo(awayScoreLabel.snp.leading).offset(-16)
+            $0.height.equalTo(16)
         }
         
         homeScoreLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-32)
+            $0.trailing.equalToSuperview().inset(16)
             $0.centerY.equalTo(homeTeamNameLabel)
+            $0.width.equalTo(32)
+            $0.height.equalTo(16)
         }
         
         awayScoreLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview().offset(-32)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.width.equalTo(32)
+            $0.height.equalTo(16)
             $0.centerY.equalTo(awayTeamNameLabel)
         }
     }

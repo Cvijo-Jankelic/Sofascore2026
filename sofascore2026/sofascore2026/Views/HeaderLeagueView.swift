@@ -12,15 +12,18 @@ import UIKit
 class HeaderLeagueView: BaseView {
 
     private let logoImageView = UIImageView()
+    private let ligaInfoContainer = UIView()
     private let countryLabel = UILabel()
     private let arrowLabel = UILabel()
     private let leagueNameLabel = UILabel()
 
     override func addViews() {
         addSubview(logoImageView)
-        addSubview(countryLabel)
-        addSubview(arrowLabel)
-        addSubview(leagueNameLabel)
+        addSubview(ligaInfoContainer)
+    
+        ligaInfoContainer.addSubview(countryLabel)
+        ligaInfoContainer.addSubview(arrowLabel)
+        ligaInfoContainer.addSubview(leagueNameLabel)
     }
 
     override func styleViews() {
@@ -29,37 +32,54 @@ class HeaderLeagueView: BaseView {
 
         countryLabel.font = .countryName
         countryLabel.numberOfLines = 1
+        countryLabel.lineBreakMode = .byClipping
+        countryLabel.textAlignment = .left
+
+        countryLabel.setContentHuggingPriority(.required, for: .horizontal)
+        countryLabel.setContentCompressionResistancePriority(.required, for: .horizontal)
 
         arrowLabel.text = "▶"
+        arrowLabel.textAlignment = .center
         arrowLabel.font = .systemFont(ofSize: 10)
         arrowLabel.textColor = .secondaryText
 
         leagueNameLabel.font = .leagueName
         leagueNameLabel.textColor = .secondaryText
         leagueNameLabel.numberOfLines = 1
+        leagueNameLabel.textAlignment = .left
     }
 
     override func setupConstraints() {
         logoImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(24)
-            $0.width.height.equalTo(32)
-            $0.top.equalToSuperview().offset(12)
-            $0.bottom.equalToSuperview().offset(-12)
+            $0.leading.equalToSuperview().inset(16)
+            $0.top.bottom.equalToSuperview().inset(12)
+            $0.size.equalTo(32)
+        }
+        
+        ligaInfoContainer.snp.makeConstraints{
+            $0.leading.equalTo(logoImageView.snp.trailing).offset(32)
+            $0.trailing.lessThanOrEqualToSuperview().inset(16)
+            $0.centerY.equalTo(logoImageView)
+            $0.height.equalTo(24)
         }
 
         countryLabel.snp.makeConstraints {
-            $0.leading.equalTo(logoImageView.snp.trailing).offset(26)
+            $0.leading.equalToSuperview()
             $0.centerY.equalToSuperview()
+            $0.height.equalTo(16)
         }
 
         arrowLabel.snp.makeConstraints {
             $0.leading.equalTo(countryLabel.snp.trailing).offset(6)
             $0.centerY.equalToSuperview()
+            $0.size.equalTo(24)
         }
 
         leagueNameLabel.snp.makeConstraints {
             $0.leading.equalTo(arrowLabel.snp.trailing).offset(6)
+            $0.trailing.equalToSuperview()
             $0.centerY.equalToSuperview()
+            $0.height.equalTo(16)
         }
     }
 
