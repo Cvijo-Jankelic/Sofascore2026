@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D20AA8682F5AA54B00F8DD8E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D20AA8672F5AA54B00F8DD8E /* SnapKit */; };
+		D27837C52F642747008EBAA9 /* SofaAcademic in Frameworks */ = {isa = PBXBuildFile; productRef = D27837C42F642747008EBAA9 /* SofaAcademic */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D27837C52F642747008EBAA9 /* SofaAcademic in Frameworks */,
 				D20AA8682F5AA54B00F8DD8E /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,6 +86,7 @@
 			name = sofascore2026;
 			packageProductDependencies = (
 				D20AA8672F5AA54B00F8DD8E /* SnapKit */,
+				D27837C42F642747008EBAA9 /* SofaAcademic */,
 			);
 			productName = sofascore2026;
 			productReference = D2AD14F62F599A3E006EC179 /* sofascore2026.app */;
@@ -115,6 +118,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				D20AA8662F5AA54B00F8DD8E /* XCRemoteSwiftPackageReference "SnapKit" */,
+				D27837C32F642747008EBAA9 /* XCRemoteSwiftPackageReference "academy" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D2AD14F72F599A3E006EC179 /* Products */;
@@ -362,6 +366,14 @@
 				minimumVersion = 5.7.1;
 			};
 		};
+		D27837C32F642747008EBAA9 /* XCRemoteSwiftPackageReference "academy" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sofascore/academy.git";
+			requirement = {
+				branch = hw2;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -369,6 +381,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D20AA8662F5AA54B00F8DD8E /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
+		};
+		D27837C42F642747008EBAA9 /* SofaAcademic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D27837C32F642747008EBAA9 /* XCRemoteSwiftPackageReference "academy" */;
+			productName = SofaAcademic;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
