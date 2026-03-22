@@ -370,7 +370,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sofascore/academy.git";
 			requirement = {
-				branch = hw2;
+				branch = hw3;
 				kind = branch;
 			};
 		};

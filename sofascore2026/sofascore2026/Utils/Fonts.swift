@@ -12,4 +12,5 @@ extension UIFont {
     static let teamName = UIFont.systemFont(ofSize: 14, weight: .regular)
     static let leagueName = UIFont.systemFont(ofSize: 14, weight: .regular)
     static let countryName = UIFont.systemFont(ofSize: 14, weight: .bold)
+    static let sportSelectorTitle = UIFont.systemFont(ofSize: 14, weight: .medium)
 }

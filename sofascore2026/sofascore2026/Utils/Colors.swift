@@ -12,4 +12,5 @@ extension UIColor {
     static let secondaryText = UIColor.gray
     static let liveRed = UIColor.red
     static let separator = UIColor.lightGray
+    static let sofaLightBlue = UIColor(red: 94/255, green: 121/255, blue: 242/255, alpha: 1)
 }

@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/sofascore/academy.git",
       "state" : {
-        "branch" : "hw2",
-        "revision" : "dd8a8a0c3bf0cff1afbecb424c40ee1cf8afd2c0"
+        "branch" : "hw3",
+        "revision" : "40141ddad6c9b88b0fd6c00c31406731f2585350"
       }
     },
     {

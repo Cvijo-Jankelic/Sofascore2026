@@ -15,4 +15,5 @@ struct MatchModel {
     let awayScore: String?
     let homeTeamLogoUrl: String?
     let awayTeamLogoUrl: String?
+    let isLive: Bool
 }

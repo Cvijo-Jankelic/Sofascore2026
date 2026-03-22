@@ -15,22 +15,22 @@ enum TeamSide {
 
 struct MatchViewHelper {
 
-    static func scoreColor(for event: Event) -> UIColor {
-        return event.status == .inProgress ? .liveRed : .primaryText
+    static func scoreColor(isLive: Bool) -> UIColor {
+        return isLive ? .liveRed : .primaryText
     }
 
-    static func teamColor(for event: Event, side: TeamSide) -> UIColor {
-        guard event.status == .finished,
-              let home = event.homeScore,
-              let away = event.awayScore else {
-            return .primaryText
-        }
+    static func teamColor(isFinished: Bool, homeScore: Int?, awayScore: Int?, side: TeamSide) -> UIColor {
+            guard isFinished,
+                  let homeScore,
+                  let awayScore else {
+                return .primaryText
+            }
 
         switch side {
         case .home:
-            return home < away ? .secondaryText : .primaryText
+            return homeScore < awayScore ? .secondaryText : .primaryText
         case .away:
-            return away < home ? .secondaryText : .primaryText
+            return homeScore < awayScore ? .secondaryText : .primaryText
         }
     }
 }

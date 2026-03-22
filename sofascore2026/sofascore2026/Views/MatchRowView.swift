@@ -116,7 +116,7 @@ class MatchRowView: BaseView {
         }
     }
     
-    func configure(with model: MatchModel, event: Event) {
+    func configure(with model: MatchModel) {
         matchTimeLabel.text = model.timeText
         matchStatusLabel.text = model.statusText
         homeTeamNameLabel.text = model.homeTeamName
@@ -124,12 +124,13 @@ class MatchRowView: BaseView {
         homeScoreLabel.text = model.homeScore
         awayScoreLabel.text = model.awayScore
         
-        matchStatusLabel.textColor = MatchViewHelper.scoreColor(for: event)
-        homeScoreLabel.textColor = MatchViewHelper.scoreColor(for: event)
-        awayScoreLabel.textColor = MatchViewHelper.scoreColor(for: event)
-        homeTeamNameLabel.textColor = MatchViewHelper.teamColor(for: event, side: .home)
-        awayTeamNameLabel.textColor = MatchViewHelper.teamColor(for: event, side: .away)
-
+        let accentColor: UIColor = model.isLive ? .liveRed : .primaryText
+        matchStatusLabel.textColor = accentColor
+        homeScoreLabel.textColor = accentColor
+        awayScoreLabel.textColor = accentColor
+        homeTeamNameLabel.textColor = .primaryText
+        awayTeamNameLabel.textColor = .primaryText
+        
         setImage(for: homeClubImageView, urlString: model.homeTeamLogoUrl)
         setImage(for: awayClubImageView, urlString: model.awayTeamLogoUrl)
     }

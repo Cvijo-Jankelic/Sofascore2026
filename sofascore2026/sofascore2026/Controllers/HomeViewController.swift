@@ -3,10 +3,18 @@ import SofaAcademic
 import SnapKit
 
 class HomeViewController: UIViewController {
+    private let footballDataSource = Homework3DataSource()
+    private let sportSelectorView = SportSelectorView()
+    private let tableView = UITableView(frame: .zero, style: .plain)
 
-    private let dataSource = Homework2DataSource()
-    private let stackView = UIStackView()
+    private var selectedSport: Sport = .football {
+        didSet {
+            reloadContent()
+        }
+    }
 
+    private var sections: [LeagueSectionModel] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
@@ -16,38 +24,80 @@ class HomeViewController: UIViewController {
     }
     
     private func addViews(){
-        view.addSubview(stackView)
-
+        view.addSubview(sportSelectorView)
+        view.addSubview(tableView)
     }
-
-    private func styleView() {
-        view.backgroundColor = .white
-        stackView.axis = .vertical
-        stackView.spacing = 0
-        stackView.alignment = .fill
+    
+    private func styleView(){
+        tableView.backgroundColor = .white
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.sectionHeaderTopPadding = 0
+        tableView.rowHeight = 56
+        tableView.register(MatchRowTableViewCell.self, forCellReuseIdentifier: MatchRowTableViewCell.reuseIdentifier)
+        tableView.register(HeaderLeagueTableWrapper.self, forHeaderFooterViewReuseIdentifier: HeaderLeagueTableWrapper.reuseIdentifier)
+        tableView.dataSource = self
+        tableView.delegate = self
     }
-
-    private func setupConstraints() {
-        stackView.snp.makeConstraints {
+    
+    private func setupConstraints(){
+        sportSelectorView.snp.makeConstraints{
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
-    }
-
-    private func configure() {
-        let league = dataSource.laLigaLeague()
-        let leagueHeaderView = HeaderLeagueView()
-        leagueHeaderView.configure(with: makeLeagueModel(from: league))
-        stackView.addArrangedSubview(leagueHeaderView)
-
-        let events = dataSource.laLigaEvents()
-        events.forEach { event in
-            let matchRowView = MatchRowView()
-            matchRowView.configure(with: makeMatchModel(from: event), event: event)
-            stackView.addArrangedSubview(matchRowView)
+        
+        tableView.snp.makeConstraints{
+            $0.top.equalTo(sportSelectorView.snp.bottom)
+            $0.leading.trailing.bottom.equalTo(view.safeAreaLayoutGuide)
         }
     }
+    
+    private func configure(){
+        sportSelectorView.configure(selectedSport: selectedSport)
+        sportSelectorView.onSportSelected = { [weak self] sport in
+            self?.selectedSport = sport
+        }
+        reloadContent()
+    }
+    
+    private func reloadContent() {
+        sportSelectorView.updateSelection(to: selectedSport)
+        sections = makeSections(for: selectedSport)
+        tableView.reloadData()
+    }
 
+    
+    private func makeSections(for sport: Sport) -> [LeagueSectionModel] {
+        switch sport {
+        case .football:
+            return makeFootballSections()
+        case .basketball, .americanFootball:
+            return []
+        }
+    }
+    
+    private func makeFootballSections() -> [LeagueSectionModel] {
+        let events = footballDataSource.events()
+        var orderedSections: [LeagueSectionModel] = []
+        events.forEach { event in
+            guard let league = event.league else { return } // unwrap League?
+            
+            let leagueId = league.id
+            if let index = orderedSections.firstIndex(where: { $0.id == leagueId }) {
+                let matchModel = makeMatchModel(from: event)
+                orderedSections[index].matches.append(matchModel)
+            } else {
+                let section = LeagueSectionModel(
+                    id: leagueId,
+                    league: makeLeagueModel(from: league), // prosljeđuj unwrappani league
+                    matches: [makeMatchModel(from: event)]
+                )
+                orderedSections.append(section)
+            }
+        }
+        
+        return orderedSections
+    }
     private func makeLeagueModel(from league: League) -> LeagueModel {
         LeagueModel(
             countryName: league.country?.name ?? "",
@@ -55,7 +105,7 @@ class HomeViewController: UIViewController {
             logoUrl: league.logoUrl
         )
     }
-
+    
     private func makeMatchModel(from event: Event) -> MatchModel {
         MatchModel(
             timeText: event.timeText,
@@ -64,8 +114,44 @@ class HomeViewController: UIViewController {
             awayTeamName: event.awayTeam.name,
             homeScore: event.homeScore.map { "\($0)" },
             awayScore: event.awayScore.map { "\($0)" },
-            homeTeamLogoUrl: event.homeTeam.logoUrl ?? "",
-            awayTeamLogoUrl: event.awayTeam.logoUrl ?? ""
+            homeTeamLogoUrl: event.homeTeam.logoUrl,
+            awayTeamLogoUrl: event.awayTeam.logoUrl,
+            isLive: event.status == .inProgress
         )
+    }
+}
+
+extension HomeViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        sections.count
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        sections[section].matches.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MatchRowTableViewCell.reuseIdentifier, for: indexPath) as? MatchRowTableViewCell else {
+            return UITableViewCell()
+        }
+
+        let model = sections[indexPath.section].matches[indexPath.row]
+        cell.configure(with: model)
+        return cell
+    }
+}
+
+extension HomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderLeagueTableWrapper.reuseIdentifier) as? HeaderLeagueTableWrapper else {
+            return nil
+        }
+        
+        headerView.configure(with: sections[section].league)
+        return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        56
     }
 }
