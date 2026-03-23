@@ -11,9 +11,6 @@ import SnapKit
 class SportSelectorButtonView: UIControl{
     private let iconImageView = UIImageView()
     private let titleLabel = UILabel()
-    private let selectorLine = UIView()
-    
-    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -29,7 +26,6 @@ class SportSelectorButtonView: UIControl{
     private func addViews(){
         addSubview(iconImageView)
         addSubview(titleLabel)
-        addSubview(selectorLine)
     }
     
     private func styleViews(){
@@ -44,10 +40,6 @@ class SportSelectorButtonView: UIControl{
         titleLabel.numberOfLines = 1
         titleLabel.adjustsFontSizeToFitWidth = true
         titleLabel.minimumScaleFactor = 0.75
-
-        selectorLine.backgroundColor = .white
-        selectorLine.layer.cornerRadius = 2
-        selectorLine.isHidden = true
     }
     
     private func setupConstraints(){
@@ -58,23 +50,15 @@ class SportSelectorButtonView: UIControl{
         }
         
         titleLabel.snp.makeConstraints{
-            $0.width.equalTo(104)
-            $0.height.equalTo(16)
-            $0.centerX.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(8)
-        }
-        
-        selectorLine.snp.makeConstraints{
-            $0.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview().inset(8)
-            $0.height.equalTo(4)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(iconImageView.snp.bottom).offset(4)
+            $0.bottom.equalToSuperview().inset(8)
         }
     }
     
     func configure(with sport: Sport, isSelected: Bool){
         titleLabel.text = sport.title
         iconImageView.image = UIImage(named: sport.icon)
-        selectorLine.isHidden = !isSelected
     }
-    
 }

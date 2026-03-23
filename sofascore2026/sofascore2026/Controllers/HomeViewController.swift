@@ -38,6 +38,11 @@ class HomeViewController: UIViewController {
         tableView.register(HeaderLeagueTableWrapper.self, forHeaderFooterViewReuseIdentifier: HeaderLeagueTableWrapper.reuseIdentifier)
         tableView.dataSource = self
         tableView.delegate = self
+        
+        sportSelectorView.configure(selectedSport: selectedSport)
+        sportSelectorView.onSportSelected = { [weak self] sport in
+            self?.selectedSport = sport
+        }
     }
     
     private func setupConstraints(){
@@ -53,10 +58,6 @@ class HomeViewController: UIViewController {
     }
     
     private func configure(){
-        sportSelectorView.configure(selectedSport: selectedSport)
-        sportSelectorView.onSportSelected = { [weak self] sport in
-            self?.selectedSport = sport
-        }
         reloadContent()
     }
     
@@ -116,7 +117,16 @@ class HomeViewController: UIViewController {
             awayScore: event.awayScore.map { "\($0)" },
             homeTeamLogoUrl: event.homeTeam.logoUrl,
             awayTeamLogoUrl: event.awayTeam.logoUrl,
-            isLive: event.status == .inProgress
+            status: {
+                switch event.status {
+                case .notStarted:
+                    return .notStarted
+                case .inProgress, .halftime:
+                    return .inProgress
+                case .finished:
+                    return .finished
+                }
+            }()
         )
     }
 }
