@@ -6,6 +6,14 @@
 //
 import Foundation
 
+enum MatchStatus{
+    case notStarted
+    case inProgress
+    case finished
+    case halfTime
+
+}
+
 struct MatchModel {
     let timeText: String
     let statusText: String
@@ -15,4 +23,5 @@ struct MatchModel {
     let awayScore: String?
     let homeTeamLogoUrl: String?
     let awayTeamLogoUrl: String?
+    let status: MatchStatus
 }

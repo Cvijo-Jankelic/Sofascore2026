@@ -116,7 +116,7 @@ class MatchRowView: BaseView {
         }
     }
     
-    func configure(with model: MatchModel, event: Event) {
+    func configure(with model: MatchModel) {
         matchTimeLabel.text = model.timeText
         matchStatusLabel.text = model.statusText
         homeTeamNameLabel.text = model.homeTeamName
@@ -124,14 +124,54 @@ class MatchRowView: BaseView {
         homeScoreLabel.text = model.homeScore
         awayScoreLabel.text = model.awayScore
         
-        matchStatusLabel.textColor = MatchViewHelper.scoreColor(for: event)
-        homeScoreLabel.textColor = MatchViewHelper.scoreColor(for: event)
-        awayScoreLabel.textColor = MatchViewHelper.scoreColor(for: event)
-        homeTeamNameLabel.textColor = MatchViewHelper.teamColor(for: event, side: .home)
-        awayTeamNameLabel.textColor = MatchViewHelper.teamColor(for: event, side: .away)
+        applyColors(with: model)
 
+                
         setImage(for: homeClubImageView, urlString: model.homeTeamLogoUrl)
         setImage(for: awayClubImageView, urlString: model.awayTeamLogoUrl)
+    }
+    
+    private func applyColors(with model: MatchModel) {
+        
+        switch model.status {
+        case .inProgress, .halfTime:
+            matchStatusLabel.textColor = .liveRed
+            homeScoreLabel.textColor = .liveRed
+            awayScoreLabel.textColor = .liveRed
+            homeTeamNameLabel.textColor = .primaryText
+            awayTeamNameLabel.textColor = .primaryText
+                    
+            
+        case .finished:
+            matchStatusLabel.textColor = .secondaryText
+            let homeScore = model.homeScore.flatMap { Int($0) } ?? 0
+            let awayScore = model.awayScore.flatMap { Int($0) } ?? 0
+            
+            if homeScore > awayScore {
+                homeTeamNameLabel.textColor = .primaryText
+                homeScoreLabel.textColor = .primaryText
+                awayTeamNameLabel.textColor = .secondaryText
+                awayScoreLabel.textColor = .secondaryText
+            } else if awayScore > homeScore {
+                homeTeamNameLabel.textColor = .secondaryText
+                homeScoreLabel.textColor = .secondaryText
+                awayTeamNameLabel.textColor = .primaryText
+                awayScoreLabel.textColor = .primaryText
+            } else {
+                homeTeamNameLabel.textColor = .primaryText
+                homeScoreLabel.textColor = .primaryText
+                awayTeamNameLabel.textColor = .primaryText
+                awayScoreLabel.textColor = .primaryText
+            }
+            
+        case .notStarted:
+            matchStatusLabel.textColor = .secondaryText
+            homeScoreLabel.textColor = .primaryText
+            awayScoreLabel.textColor = .primaryText
+            homeTeamNameLabel.textColor = .primaryText
+            awayTeamNameLabel.textColor = .primaryText
+        }
+        
     }
     
     private func setupMatchTimeLabel() {

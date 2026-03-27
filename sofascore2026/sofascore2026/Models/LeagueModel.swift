@@ -9,3 +9,9 @@ struct LeagueModel{
     let leagueName: String
     let logoUrl: String?
 }
+
+struct LeagueSectionModel {
+    let id: Int
+    let league: LeagueModel
+    var matches: [MatchModel]
+}

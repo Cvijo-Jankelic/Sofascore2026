@@ -27,9 +27,9 @@ class HeaderLeagueView: BaseView {
     }
 
     override func styleViews() {
+        backgroundColor = .white
         logoImageView.contentMode = .scaleAspectFit
         
-
         countryLabel.font = .countryName
         countryLabel.numberOfLines = 1
         countryLabel.lineBreakMode = .byClipping
@@ -87,8 +87,6 @@ class HeaderLeagueView: BaseView {
         countryLabel.text = model.countryName
         leagueNameLabel.text = model.leagueName
 
-        if let logoUrl = model.logoUrl {
-            logoImageView.loadImage(from: URL(string: logoUrl))
-        }
+        logoImageView.loadImage(from: URL(string: model.logoUrl ?? ""))
     }
 }
