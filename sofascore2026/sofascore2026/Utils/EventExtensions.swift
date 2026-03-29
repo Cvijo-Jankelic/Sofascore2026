@@ -31,4 +31,11 @@ extension Event {
             return "\(Int(elapsed / 60))'"
         }
     }
+    
+    var dateText: String {
+        let date = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy."
+        return formatter.string(from: date)
+    }
 }

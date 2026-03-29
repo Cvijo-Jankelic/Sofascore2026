@@ -23,5 +23,8 @@ struct MatchModel {
     let awayScore: String?
     let homeTeamLogoUrl: String?
     let awayTeamLogoUrl: String?
+    let dateText: String
+    let league: LeagueModel
+    let sport: Sport
     let status: MatchStatus
 }
