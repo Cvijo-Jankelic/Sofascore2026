@@ -127,8 +127,8 @@ class MatchRowView: BaseView {
         applyColors(with: model)
 
                 
-        setImage(for: homeClubImageView, urlString: model.homeTeamLogoUrl)
-        setImage(for: awayClubImageView, urlString: model.awayTeamLogoUrl)
+        homeClubImageView.loadImage(from: model.homeTeamLogoUrl)
+        awayClubImageView.loadImage(from: model.awayTeamLogoUrl)
     }
     
     private func applyColors(with model: MatchModel) {
@@ -174,9 +174,5 @@ class MatchRowView: BaseView {
         homeClubImageView.contentMode = .scaleAspectFit
         awayClubImageView.contentMode = .scaleAspectFit
     }
-    
-    func setImage(for imageView: UIImageView, urlString: String?) {
-        imageView.loadImage(from: URL(string: urlString ?? ""))
-    }
-    
+        
 }

@@ -50,10 +50,10 @@ class SportSelectorButtonView: UIControl{
         }
         
         titleLabel.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview().inset(8)
+            $0.leading.trailing.equalToSuperview().inset(8).priority(.high)
             $0.centerX.equalToSuperview()
             $0.top.equalTo(iconImageView.snp.bottom).offset(4)
-            $0.bottom.equalToSuperview().inset(8)
+            $0.bottom.equalToSuperview().inset(8).priority(.high)
         }
     }
     

@@ -52,7 +52,7 @@ final class SportSelectorView: BaseView {
         selectorLine.snp.makeConstraints {
             $0.bottom.equalToSuperview()
             $0.height.equalTo(4)
-            $0.leading.trailing.equalTo(footballButtonView).inset(8)
+            $0.leading.trailing.equalTo(footballButtonView).inset(8).priority(.high)
         }
     }
 
@@ -70,7 +70,7 @@ final class SportSelectorView: BaseView {
             self.selectorLine.snp.remakeConstraints {
                 $0.bottom.equalToSuperview()
                 $0.height.equalTo(4)
-                $0.leading.trailing.equalTo(selectedButton).inset(8)
+                $0.leading.trailing.equalTo(selectedButton).inset(8).priority(.high)
             }
             self.layoutIfNeeded()
         }

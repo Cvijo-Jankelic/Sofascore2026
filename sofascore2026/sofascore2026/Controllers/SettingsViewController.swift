@@ -10,26 +10,26 @@ import SnapKit
 
 final class SettingsViewController: UIViewController {
     
+    private let contentView = UIView()
     private let titleLabel = UILabel()
     private let dismissButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        addViews()
         styleViews()
+        setupConstraints()
+    }
+    
+    private func addViews() {
+        view.addSubview(contentView)
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(dismissButton)
     }
     
     private func styleViews() {
-        
-        let contentView = UIView()
-        contentView.backgroundColor = .white
-        view.addSubview(contentView)
-                
-        contentView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.bottom.equalToSuperview()
-        }
-        
         view.backgroundColor = .sofaLightBlue
+        contentView.backgroundColor = .white
         
         titleLabel.text = "Settings"
         titleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -39,10 +39,13 @@ final class SettingsViewController: UIViewController {
         dismissButton.setTitleColor(.sofaLightBlue, for: .normal)
         dismissButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         dismissButton.addTarget(self, action: #selector(didTapDismiss), for: .touchUpInside)
-        
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(dismissButton)
-        
+    }
+    
+    private func setupConstraints() {
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
         
         titleLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
@@ -50,12 +53,9 @@ final class SettingsViewController: UIViewController {
         }
         
         dismissButton.snp.makeConstraints {
-            $0.centerX.equalTo(titleLabel)
-            $0.centerY.equalToSuperview().multipliedBy(2.0/3.0)
-            $0.top.equalTo(titleLabel).offset(24)
-            $0.height.equalTo(44)
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalToSuperview().dividedBy(3)
         }
-        
     }
     
     @objc private func didTapDismiss() {

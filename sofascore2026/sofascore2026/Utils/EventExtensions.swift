@@ -10,9 +10,6 @@ import SofaAcademic
 
 
 extension Event {
-    var timeText: String {
-        Event.dateTimeFormatter.string(from: Date(timeIntervalSince1970: Double(startTimestamp)))
-    }
     
     private static let dateTimeFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -20,6 +17,13 @@ extension Event {
         return formatter
         
     }()
+    
+    private static let dateFormatter: DateFormatter = {
+         let formatter = DateFormatter()
+         formatter.dateFormat = "dd.MM.yyyy."
+         return formatter
+     }()
+     
     
     var statusText: String{
         switch status {
@@ -32,10 +36,11 @@ extension Event {
         }
     }
     
-    var dateText: String {
-        let date = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd.MM.yyyy."
-        return formatter.string(from: date)
+    var timeText: String {
+        Event.dateTimeFormatter.string(from: Date(timeIntervalSince1970: Double(startTimestamp)))
     }
+    
+    var dateText: String {
+          Event.dateFormatter.string(from: Date(timeIntervalSince1970: Double(startTimestamp)))
+      }
 }

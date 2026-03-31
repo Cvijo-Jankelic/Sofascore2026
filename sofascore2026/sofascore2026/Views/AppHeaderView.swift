@@ -13,14 +13,14 @@ final class AppHeaderView: BaseView {
     
     var onSettingsTapped: (() -> Void)?
     
+    private let buttonStack = UIStackView()
     private let logoImageView = UIImageView()
     private let trophyButton = UIButton()
     private let settingsButton = UIButton()
-    private let buttonStack = UIStackView()
     
     override func addViews(){
-        addSubview(logoImageView)
         addSubview(buttonStack)
+        addSubview(logoImageView)
         buttonStack.addArrangedSubview(trophyButton)
         buttonStack.addArrangedSubview(settingsButton)
     }
@@ -33,25 +33,30 @@ final class AppHeaderView: BaseView {
         
         buttonStack.axis = .horizontal
         
-        trophyButton.setImage(UIImage(named: "ic_trophy"), for: .normal)
-        trophyButton.tintColor = .white
+        var trophyConfig = UIButton.Configuration.plain()
+        trophyConfig.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+        trophyConfig.image = UIImage(named: "ic_trophy")
+        trophyConfig.baseForegroundColor = .white
+        trophyButton.configuration = trophyConfig
         
-        settingsButton.setImage(UIImage(named: "ic_settings"), for: .normal)
-        settingsButton.tintColor = .white
+        var settingsConfig = UIButton.Configuration.plain()
         
-        let inset = UIEdgeInsets(top: 12, left: 12, bottom: 12, right: 12)
-        trophyButton.contentEdgeInsets = inset
-        settingsButton.contentEdgeInsets = inset
+        settingsConfig.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 12, bottom: 12, trailing: 12)
+        settingsConfig.image = UIImage(named: "ic_settings")
+        settingsConfig.baseForegroundColor = .white
+        settingsButton.configuration = settingsConfig
         
     }
     
     override func setupConstraints(){
         logoImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(16)
-            $0.top.equalToSuperview().inset(14)
+            $0.leading.equalToSuperview().inset(16).priority(.high)
+            $0.centerY.equalToSuperview()
+            $0.height.equalTo(20)
         }
         
         buttonStack.snp.makeConstraints{
+            $0.leading.greaterThanOrEqualTo(logoImageView.snp.trailing).offset(8)
             $0.trailing.equalToSuperview().inset(4)
             $0.top.bottom.equalToSuperview()
         }

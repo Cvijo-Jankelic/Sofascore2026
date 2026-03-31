@@ -11,9 +11,9 @@ import SofaAcademic
 
 final class EventDetailView: BaseView {
     
-    private let homeGroupedView = UIView()
-    private let awayGroupedView = UIView()
-    private let scoreLabelView = UIView()
+    private let homeGroupedView = UIStackView()
+    private let awayGroupedView = UIStackView()
+    private let scoreLabelView = UIStackView()
     
     private let matchDateLabel = UILabel()
     private let matchStatusLabel = UILabel()
@@ -34,47 +34,79 @@ final class EventDetailView: BaseView {
         addSubview(awayGroupedView)
         addSubview(scoreLabelView)
         
-        homeGroupedView.addSubview(homeClubImageView)
-        homeGroupedView.addSubview(homeTeamNameLabel)
-        
-        awayGroupedView.addSubview(awayClubImageView)
-        awayGroupedView.addSubview(awayTeamNameLabel)
+        homeGroupedView.addArrangedSubview(homeClubImageView)
+        homeGroupedView.addArrangedSubview(homeTeamNameLabel)
+
+        awayGroupedView.addArrangedSubview(awayClubImageView)
+        awayGroupedView.addArrangedSubview(awayTeamNameLabel)
         
         addSubview(matchDateLabel)
         addSubview(matchStatusLabel)
         addSubview(matchTimeLabel)
         
-        scoreLabelView.addSubview(homeScoreLabel)
-        scoreLabelView.addSubview(awayScoreLabel)
-        scoreLabelView.addSubview(separatorLabel)
+        scoreLabelView.addArrangedSubview(homeScoreLabel)
+        scoreLabelView.addArrangedSubview(separatorLabel)
+        scoreLabelView.addArrangedSubview(awayScoreLabel)
     }
     
     
-    override func styleViews(){
+    override func styleViews() {
+        
+        scoreLabelView.axis = .horizontal
+        scoreLabelView.alignment = .center
+        scoreLabelView.spacing = 8
+        
+        homeGroupedView.axis = .vertical
+        homeGroupedView.alignment = .center
+        homeGroupedView.spacing = 8
+        
+        awayGroupedView.axis = .vertical
+        awayGroupedView.alignment = .center
+        awayGroupedView.spacing = 8
+        
+        separatorLabel.text = "-"
+        separatorLabel.font = .eventDetailScore
+        separatorLabel.textAlignment = .center
+        
         setupMatchTimeLabel()
         setupMatchStatusLabel()
         setupTeamNameLabels()
         setupScoreLabels()
         setupImageViews()
         setupMatchDateLabel()
-        
-        separatorLabel.text = "-"
-        separatorLabel.font = .eventDetailScore
-        separatorLabel.textAlignment = .center
-
     }
 
     override func setupConstraints() {
         homeGroupedView.snp.makeConstraints {
             $0.leading.top.bottom.equalToSuperview().inset(16)
-         //   $0.width.equalToSuperview().dividedBy(3)
-
+            $0.width.equalToSuperview().dividedBy(3)
         }
         
         awayGroupedView.snp.makeConstraints {
             $0.trailing.top.bottom.equalToSuperview().inset(16)
-         //   $0.width.equalToSuperview().dividedBy(3)
+            $0.width.equalToSuperview().dividedBy(3)
+        }
+        
+        scoreLabelView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(16)
+        }
+        
+        homeClubImageView.snp.makeConstraints {
+            $0.size.equalTo(40)
+        }
 
+        
+        awayClubImageView.snp.makeConstraints {
+            $0.size.equalTo(40)
+        }
+        
+        homeTeamNameLabel.snp.makeConstraints {
+            $0.width.lessThanOrEqualToSuperview()
+        }
+
+        awayTeamNameLabel.snp.makeConstraints {
+            $0.width.lessThanOrEqualToSuperview()
         }
         
         matchDateLabel.snp.makeConstraints {
@@ -83,59 +115,13 @@ final class EventDetailView: BaseView {
         }
         
         matchTimeLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(44)
             $0.centerX.equalToSuperview()
+            $0.top.equalTo(matchDateLabel.snp.bottom).offset(4)
         }
         
         matchStatusLabel.snp.makeConstraints {
-            $0.leading.equalTo(homeGroupedView.snp.trailing)
-            $0.trailing.equalTo(awayGroupedView.snp.leading)
-            $0.top.equalToSuperview().inset(56)
-        }
-        
-        scoreLabelView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().inset(16)
-        }
-
-        homeScoreLabel.snp.makeConstraints {
-            $0.trailing.equalTo(separatorLabel.snp.leading).offset(-8)
-            $0.centerY.equalToSuperview()
-            $0.leading.equalToSuperview()
-        }
-
-        separatorLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.top.bottom.equalToSuperview()
-        }
-
-        awayScoreLabel.snp.makeConstraints {
-            $0.leading.equalTo(separatorLabel.snp.trailing).offset(8)
-            $0.centerY.equalToSuperview()
-        }
-        
-        homeClubImageView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(28)
-            $0.top.centerX.equalToSuperview()
-            $0.size.equalTo(40)
-            
-        }
-        homeTeamNameLabel.snp.makeConstraints {
-            $0.top.equalTo(homeClubImageView.snp.bottom).offset(8)
-           // $0.leading.trailing.equalToSuperview()
-            $0.centerX.equalToSuperview()
-        }
-        
-        awayClubImageView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(28)
-            $0.top.centerX.equalToSuperview()
-            $0.size.equalTo(40)
-        }
-        
-        awayTeamNameLabel.snp.makeConstraints {
-            $0.top.equalTo(awayClubImageView.snp.bottom).offset(8)
-           // $0.leading.trailing.equalToSuperview()
-            $0.centerX.equalToSuperview()
+            $0.top.equalTo(scoreLabelView.snp.bottom).offset(4)
         }
     }
     
@@ -149,7 +135,6 @@ final class EventDetailView: BaseView {
             matchTimeLabel.isHidden = false
             scoreLabelView.isHidden = true
             matchStatusLabel.isHidden = true
-            separatorLabel.isHidden = true
             
             matchDateLabel.text = model.dateText
             matchTimeLabel.text = model.timeText
@@ -159,34 +144,24 @@ final class EventDetailView: BaseView {
             matchTimeLabel.isHidden = true
             scoreLabelView.isHidden = false
             matchStatusLabel.isHidden = false
-            separatorLabel.isHidden = false
             
             homeScoreLabel.text = model.homeScore ?? "-"
             awayScoreLabel.text = model.awayScore ?? "-"
-            homeScoreLabel.textColor = model.scoreColor
-            awayScoreLabel.textColor = model.scoreColor
-            separatorLabel.textColor = model.scoreColor
             matchStatusLabel.text = model.statusText
-            matchStatusLabel.textColor = model.statusColor
             
         case .finished:
             matchDateLabel.isHidden = true
             matchTimeLabel.isHidden = true
             scoreLabelView.isHidden = false
             matchStatusLabel.isHidden = false
-            separatorLabel.isHidden = false
             
             homeScoreLabel.text = model.homeScore ?? "-"
             awayScoreLabel.text = model.awayScore ?? "-"
-            homeScoreLabel.textColor = model.scoreColor
-            awayScoreLabel.textColor = model.scoreColor
-            separatorLabel.textColor = model.scoreColor
             matchStatusLabel.text = "Full Time"
-            matchStatusLabel.textColor = model.statusColor
         }
         
-        setImage(for: homeClubImageView, urlString: model.homeTeamLogoUrl)
-        setImage(for: awayClubImageView, urlString: model.awayTeamLogoUrl)
+        homeClubImageView.loadImage(from: model.homeTeamLogoUrl)
+        awayClubImageView.loadImage(from: model.awayTeamLogoUrl)
         applyColors(with: model)
     }
     
@@ -219,9 +194,9 @@ final class EventDetailView: BaseView {
     private func setupTeamNameLabels() {
         [homeTeamNameLabel, awayTeamNameLabel].forEach {
             $0.font = .eventDetailTeamName
-            $0.numberOfLines = 1
-            $0.lineBreakMode = .byTruncatingTail
-            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+            $0.numberOfLines = 0
+            $0.textAlignment = .center
+            $0.lineBreakMode = .byWordWrapping
         }
     }
 
@@ -238,7 +213,4 @@ final class EventDetailView: BaseView {
         awayClubImageView.contentMode = .scaleAspectFit
     }
     
-    func setImage(for imageView: UIImageView, urlString: String?) {
-        imageView.loadImage(from: URL(string: urlString ?? ""))
-    }
 }

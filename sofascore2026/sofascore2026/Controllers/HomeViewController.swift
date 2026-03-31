@@ -108,7 +108,7 @@ class HomeViewController: UIViewController {
             } else {
                 let section = LeagueSectionModel(
                     id: leagueId,
-                    league: makeLeagueModel(from: league), // prosljeđuj unwrappani league
+                    league: makeLeagueModel(from: league), // proslijedi unwrappani league
                     matches: [makeMatchModel(from: event, league: league)]
                 )
                 orderedSections.append(section)
@@ -158,11 +158,14 @@ extension HomeViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        sections[section].matches.count
+        guard section < sections.count else { return 0 }
+        return sections[section].matches.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MatchRowTableViewCell.reuseIdentifier, for: indexPath) as? MatchRowTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MatchRowTableViewCell.reuseIdentifier, for: indexPath) as? MatchRowTableViewCell,
+              indexPath.section < sections.count,
+              indexPath.row < sections[indexPath.section].matches.count else {
             return UITableViewCell()
         }
 
@@ -174,7 +177,8 @@ extension HomeViewController: UITableViewDataSource {
 
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderLeagueTableWrapper.reuseIdentifier) as? HeaderLeagueTableWrapper else {
+        guard section < sections.count,
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderLeagueTableWrapper.reuseIdentifier) as? HeaderLeagueTableWrapper else {
             return nil
         }
         
@@ -188,6 +192,10 @@ extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard indexPath.section < sections.count,
+              indexPath.row < sections[indexPath.section].matches.count else { return }
+        
         let match = sections[indexPath.section].matches[indexPath.row]
         let detailVC = EventDetailViewController(match: match)
         navigationController?.pushViewController(detailVC, animated: true)
