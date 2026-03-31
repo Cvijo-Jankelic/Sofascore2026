@@ -40,13 +40,14 @@ final class EventDetailView: BaseView {
         awayGroupedView.addArrangedSubview(awayClubImageView)
         awayGroupedView.addArrangedSubview(awayTeamNameLabel)
         
+        scoreLabelView.addArrangedSubview(homeScoreLabel)
+        scoreLabelView.addArrangedSubview(separatorLabel)
+        scoreLabelView.addArrangedSubview(awayScoreLabel)
+        
         addSubview(matchDateLabel)
         addSubview(matchStatusLabel)
         addSubview(matchTimeLabel)
         
-        scoreLabelView.addArrangedSubview(homeScoreLabel)
-        scoreLabelView.addArrangedSubview(separatorLabel)
-        scoreLabelView.addArrangedSubview(awayScoreLabel)
     }
     
     

@@ -48,19 +48,19 @@ final class AppHeaderView: BaseView {
         
     }
     
-    override func setupConstraints(){
-        logoImageView.snp.makeConstraints {
-            $0.leading.equalToSuperview().inset(16).priority(.high)
-            $0.centerY.equalToSuperview()
-            $0.height.equalTo(20)
+        override func setupConstraints(){
+            logoImageView.snp.makeConstraints {
+                $0.leading.equalToSuperview().inset(16).priority(.high)
+                $0.centerY.equalToSuperview()
+                $0.height.equalTo(20)
+            }
+            
+            buttonStack.snp.makeConstraints{
+                $0.leading.greaterThanOrEqualTo(logoImageView.snp.trailing).offset(8)
+                $0.trailing.equalToSuperview().inset(4)
+                $0.top.bottom.equalToSuperview()
+            }
         }
-        
-        buttonStack.snp.makeConstraints{
-            $0.leading.greaterThanOrEqualTo(logoImageView.snp.trailing).offset(8)
-            $0.trailing.equalToSuperview().inset(4)
-            $0.top.bottom.equalToSuperview()
-        }
-    }
     
     override func setupGestureRecognizers() {
         settingsButton.addTarget(self, action: #selector(didTapSettings), for: .touchUpInside)
