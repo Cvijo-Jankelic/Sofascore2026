@@ -113,16 +113,22 @@ final class EventDetailView: BaseView {
         matchDateLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(24)
+            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4)
+            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4)
         }
-        
+
         matchTimeLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(matchDateLabel.snp.bottom).offset(4)
+            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4)
+            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4)
         }
-        
+
         matchStatusLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(scoreLabelView.snp.bottom).offset(4)
+            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4)
+            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4)
         }
     }
     
