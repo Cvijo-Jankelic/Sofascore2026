@@ -3,10 +3,11 @@ import SofaAcademic
 import SnapKit
 
 class HomeViewController: UIViewController {
+    private let appHeaderView = AppHeaderView()
     private let footballDataSource = Homework3DataSource()
     private let sportSelectorView = SportSelectorView()
     private let tableView = UITableView(frame: .zero, style: .plain)
-
+    
     private var selectedSport: Sport = .football {
         didSet {
             reloadContent()
@@ -24,6 +25,7 @@ class HomeViewController: UIViewController {
     }
     
     private func addViews(){
+        view.addSubview(appHeaderView)
         view.addSubview(sportSelectorView)
         view.addSubview(tableView)
     }
@@ -46,8 +48,14 @@ class HomeViewController: UIViewController {
     }
     
     private func setupConstraints(){
+        
+        appHeaderView.snp.makeConstraints{
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top).offset(48)
+        }
+        
         sportSelectorView.snp.makeConstraints{
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(appHeaderView.snp.bottom)
             $0.leading.trailing.equalTo(view.safeAreaLayoutGuide)
         }
         
@@ -58,7 +66,17 @@ class HomeViewController: UIViewController {
     }
     
     private func configure(){
+        appHeaderView.onSettingsTapped = {[weak self] in
+            let settingsVC = SettingsViewController()
+            settingsVC.modalPresentationStyle = .fullScreen
+            self?.present(settingsVC, animated: true)
+        }
         reloadContent()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
     private func reloadContent() {
@@ -85,13 +103,13 @@ class HomeViewController: UIViewController {
             
             let leagueId = league.id
             if let index = orderedSections.firstIndex(where: { $0.id == leagueId }) {
-                let matchModel = makeMatchModel(from: event)
+                let matchModel = makeMatchModel(from: event, league: league)
                 orderedSections[index].matches.append(matchModel)
             } else {
                 let section = LeagueSectionModel(
                     id: leagueId,
-                    league: makeLeagueModel(from: league), // prosljeđuj unwrappani league
-                    matches: [makeMatchModel(from: event)]
+                    league: makeLeagueModel(from: league), // proslijedi unwrappani league
+                    matches: [makeMatchModel(from: event, league: league)]
                 )
                 orderedSections.append(section)
             }
@@ -107,7 +125,7 @@ class HomeViewController: UIViewController {
         )
     }
     
-    private func makeMatchModel(from event: Event) -> MatchModel {
+    private func makeMatchModel(from event: Event, league: League) -> MatchModel {
         MatchModel(
             timeText: event.timeText,
             statusText: event.statusText,
@@ -117,6 +135,9 @@ class HomeViewController: UIViewController {
             awayScore: event.awayScore.map { "\($0)" },
             homeTeamLogoUrl: event.homeTeam.logoUrl,
             awayTeamLogoUrl: event.awayTeam.logoUrl,
+            dateText: event.dateText,
+            league: makeLeagueModel(from: league),
+            sport: .football,
             status: {
                 switch event.status {
                 case .notStarted:
@@ -137,11 +158,14 @@ extension HomeViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        sections[section].matches.count
+        guard section < sections.count else { return 0 }
+        return sections[section].matches.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: MatchRowTableViewCell.reuseIdentifier, for: indexPath) as? MatchRowTableViewCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: MatchRowTableViewCell.reuseIdentifier, for: indexPath) as? MatchRowTableViewCell,
+              indexPath.section < sections.count,
+              indexPath.row < sections[indexPath.section].matches.count else {
             return UITableViewCell()
         }
 
@@ -153,7 +177,8 @@ extension HomeViewController: UITableViewDataSource {
 
 extension HomeViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderLeagueTableWrapper.reuseIdentifier) as? HeaderLeagueTableWrapper else {
+        guard section < sections.count,
+              let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: HeaderLeagueTableWrapper.reuseIdentifier) as? HeaderLeagueTableWrapper else {
             return nil
         }
         
@@ -163,5 +188,16 @@ extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         56
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        guard indexPath.section < sections.count,
+              indexPath.row < sections[indexPath.section].matches.count else { return }
+        
+        let match = sections[indexPath.section].matches[indexPath.row]
+        let detailVC = EventDetailViewController(match: match)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }

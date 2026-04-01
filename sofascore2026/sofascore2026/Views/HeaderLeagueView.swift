@@ -87,6 +87,6 @@ class HeaderLeagueView: BaseView {
         countryLabel.text = model.countryName
         leagueNameLabel.text = model.leagueName
 
-        logoImageView.loadImage(from: URL(string: model.logoUrl ?? ""))
+        logoImageView.loadImage(from: model.logoUrl)
     }
 }

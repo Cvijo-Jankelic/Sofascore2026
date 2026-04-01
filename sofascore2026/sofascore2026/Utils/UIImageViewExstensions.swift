@@ -7,8 +7,8 @@
 import UIKit
 
 extension UIImageView {
-    func loadImage(from url: URL?) {
-        guard let url = url else { return }
+    func loadImage(from urlString: String?) {
+        guard let urlString = urlString, let url = URL(string: urlString) else { return }
             
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else { return }
