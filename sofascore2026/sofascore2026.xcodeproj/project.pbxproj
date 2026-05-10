@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D20AA8682F5AA54B00F8DD8E /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = D20AA8672F5AA54B00F8DD8E /* SnapKit */; };
 		D27837C52F642747008EBAA9 /* SofaAcademic in Frameworks */ = {isa = PBXBuildFile; productRef = D27837C42F642747008EBAA9 /* SofaAcademic */; };
+		D2B4D4352FAF7BF3003D0CDD /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = D2B4D4342FAF7BF3003D0CDD /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D2B4D4352FAF7BF3003D0CDD /* Alamofire in Frameworks */,
 				D27837C52F642747008EBAA9 /* SofaAcademic in Frameworks */,
 				D20AA8682F5AA54B00F8DD8E /* SnapKit in Frameworks */,
 			);
@@ -87,6 +89,7 @@
 			packageProductDependencies = (
 				D20AA8672F5AA54B00F8DD8E /* SnapKit */,
 				D27837C42F642747008EBAA9 /* SofaAcademic */,
+				D2B4D4342FAF7BF3003D0CDD /* Alamofire */,
 			);
 			productName = sofascore2026;
 			productReference = D2AD14F62F599A3E006EC179 /* sofascore2026.app */;
@@ -119,6 +122,7 @@
 			packageReferences = (
 				D20AA8662F5AA54B00F8DD8E /* XCRemoteSwiftPackageReference "SnapKit" */,
 				D27837C32F642747008EBAA9 /* XCRemoteSwiftPackageReference "academy" */,
+				D2B4D4332FAF7BF3003D0CDD /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = D2AD14F72F599A3E006EC179 /* Products */;
@@ -374,6 +378,14 @@
 				kind = branch;
 			};
 		};
+		D2B4D4332FAF7BF3003D0CDD /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.12.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -386,6 +398,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = D27837C32F642747008EBAA9 /* XCRemoteSwiftPackageReference "academy" */;
 			productName = SofaAcademic;
+		};
+		D2B4D4342FAF7BF3003D0CDD /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D2B4D4332FAF7BF3003D0CDD /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
