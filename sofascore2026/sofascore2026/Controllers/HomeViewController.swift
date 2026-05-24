@@ -79,16 +79,18 @@ class HomeViewController: UIViewController {
 
     private func fetchEvents(for sport: Sport) {
         sportSelectorView.updateSelection(to: sport)
+        guard let token = AuthService.shared.token else { return }
         Task {
             do {
-                let apiEvents = try await apiClient.fetchEvents(sport: sport.slug)
-                let newSections = makeSections(from: apiEvents, sport: sport)
-                await MainActor.run {
-                    sections = newSections
-                    tableView.reloadData()
+                let apiEvents = try await apiClient.fetchSecureEvents(sport: sport.slug, token: token)
+                for event in apiEvents {
+                    if let league = event.league { DatabaseManager.shared.saveLeague(league) }
+                    DatabaseManager.shared.saveEvent(event, sport: sport.slug)
                 }
+                sections = makeSections(from: apiEvents, sport: sport)
+                tableView.reloadData()
             } catch {
-                print("API error: \(error)")
+                print("Fetch error: \(error)")
             }
         }
     }

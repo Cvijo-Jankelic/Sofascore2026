@@ -30,20 +30,48 @@ final class APIClient {
         }
     }
 
-    func fetchEvents(sport: String, completion: @escaping (Result<[APIEvent], Error>) -> Void) {
-        AF.request("\(baseURL)/events?sport=\(sport)")
+    func login(username: String, password: String) async throws -> APILoginResponse {
+        struct Body: Encodable { let username: String; let password: String }
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request(
+                "\(baseURL)/login",
+                method: .post,
+                parameters: Body(username: username, password: password),
+                encoder: JSONParameterEncoder.default
+            )
             .responseData { response in
                 switch response.result {
                 case .success(let data):
                     do {
-                        let events = try JSONDecoder().decode([APIEvent].self, from: data)
-                        completion(.success(events))
+                        let result = try JSONDecoder().decode(APILoginResponse.self, from: data)
+                        continuation.resume(returning: result)
                     } catch {
-                        completion(.failure(error))
+                        continuation.resume(throwing: error)
                     }
                 case .failure(let error):
-                    completion(.failure(error))
+                    continuation.resume(throwing: error)
                 }
             }
+        }
+    }
+
+    func fetchSecureEvents(sport: String, token: String) async throws -> [APIEvent] {
+        let headers: HTTPHeaders = ["Authorization": "Bearer \(token)"]
+        return try await withCheckedThrowingContinuation { continuation in
+            AF.request("\(baseURL)/secure/events?sport=\(sport)", headers: headers)
+                .responseData { response in
+                    switch response.result {
+                    case .success(let data):
+                        do {
+                            let events = try JSONDecoder().decode([APIEvent].self, from: data)
+                            continuation.resume(returning: events)
+                        } catch {
+                            continuation.resume(throwing: error)
+                        }
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+        }
     }
 }
