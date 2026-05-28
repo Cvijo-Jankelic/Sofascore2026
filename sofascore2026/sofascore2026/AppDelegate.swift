@@ -18,12 +18,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        
-        let homevc = HomeViewController()
-        let navController = UINavigationController(rootViewController: homevc)
-        window?.rootViewController = navController
+
+        if AuthService.shared.isLoggedIn {
+            window?.rootViewController = UINavigationController(rootViewController: HomeViewController())
+        } else {
+            window?.rootViewController = LoginViewController()
+        }
         window?.makeKeyAndVisible()
 
         return true
+    }
+
+    static func showMain() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let window = appDelegate.window else { return }
+        let navController = UINavigationController(rootViewController: HomeViewController())
+        UIView.transition(with: window, duration: 0.35, options: .transitionCrossDissolve) {
+            appDelegate.window?.rootViewController = navController
+        }
+    }
+
+    static func showLogin() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let window = appDelegate.window else { return }
+        UIView.transition(with: window, duration: 0.35, options: .transitionCrossDissolve) {
+            appDelegate.window?.rootViewController = LoginViewController()
+        }
     }
 }

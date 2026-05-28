@@ -43,3 +43,8 @@ struct APIEvent: Codable, Sendable {
     let homeScore: Int?
     let awayScore: Int?
 }
+
+struct APILoginResponse: Decodable, Sendable {
+    let token: String
+    let name: String
+}

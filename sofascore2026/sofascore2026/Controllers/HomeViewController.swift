@@ -5,7 +5,7 @@ class HomeViewController: UIViewController {
     private let appHeaderView = AppHeaderView()
     private let sportSelectorView = SportSelectorView()
     private let tableView = UITableView(frame: .zero, style: .plain)
-    private let apiClient = APIClient()
+    private var fetchTask: Task<Void, Never>?
 
     private var selectedSport: Sport = .football {
         didSet {
@@ -64,10 +64,10 @@ class HomeViewController: UIViewController {
     }
 
     private func configure() {
+        navigationItem.backButtonTitle = ""
         appHeaderView.onSettingsTapped = { [weak self] in
             let settingsVC = SettingsViewController()
-            settingsVC.modalPresentationStyle = .fullScreen
-            self?.present(settingsVC, animated: true)
+            self?.navigationController?.pushViewController(settingsVC, animated: true)
         }
         fetchEvents(for: selectedSport)
     }
@@ -79,16 +79,23 @@ class HomeViewController: UIViewController {
 
     private func fetchEvents(for sport: Sport) {
         sportSelectorView.updateSelection(to: sport)
-        Task {
+        guard let token = AuthService.shared.token else { return }
+        fetchTask?.cancel()
+        fetchTask = Task {
             do {
-                let apiEvents = try await apiClient.fetchEvents(sport: sport.slug)
-                let newSections = makeSections(from: apiEvents, sport: sport)
-                await MainActor.run {
-                    sections = newSections
-                    tableView.reloadData()
+                let apiEvents = try await APIClient.shared.fetchEvents(sport: sport.slug, token: token)
+                guard !Task.isCancelled else { return }
+                Task.detached(priority: .utility) {
+                    for event in apiEvents {
+                        if let league = event.league { DatabaseManager.shared.saveLeague(league) }
+                        DatabaseManager.shared.saveEvent(event, sport: sport.slug)
+                    }
                 }
+                sections = makeSections(from: apiEvents, sport: sport)
+                tableView.reloadData()
             } catch {
-                print("API error: \(error)")
+                guard !Task.isCancelled else { return }
+                print("Fetch error: \(error)")
             }
         }
     }
