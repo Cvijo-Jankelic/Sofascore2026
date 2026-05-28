@@ -64,10 +64,10 @@ class HomeViewController: UIViewController {
     }
 
     private func configure() {
+        navigationItem.backButtonTitle = ""
         appHeaderView.onSettingsTapped = { [weak self] in
             let settingsVC = SettingsViewController()
-            settingsVC.modalPresentationStyle = .fullScreen
-            self?.present(settingsVC, animated: true)
+            self?.navigationController?.pushViewController(settingsVC, animated: true)
         }
         fetchEvents(for: selectedSport)
     }

@@ -4,17 +4,19 @@ import SnapKit
 final class LoginViewController: UIViewController {
 
     private let headerView = UIView()
-    private let logoContainer = UIView()
-    private let logoLabel = UILabel()
-    private let appTitleLabel = UILabel()
-    private let subtitleLabel = UILabel()
+    private let titleLabel = UILabel()
 
-    private let formCard = UIView()
+    private let usernameLabel = UILabel()
     private let usernameField = UITextField()
+    private let usernameSeparator = UIView()
+
+    private let passwordLabel = UILabel()
     private let passwordField = UITextField()
+    private let passwordSeparator = UIView()
+
+    private let errorLabel = UILabel()
     private let loginButton = UIButton(type: .system)
     private let activityIndicator = UIActivityIndicatorView(style: .medium)
-    private let errorLabel = UILabel()
 
     private let apiClient = APIClient()
 
@@ -27,152 +29,127 @@ final class LoginViewController: UIViewController {
 
     private func addViews() {
         view.addSubview(headerView)
-        headerView.addSubview(logoContainer)
-        logoContainer.addSubview(logoLabel)
-        headerView.addSubview(appTitleLabel)
-        headerView.addSubview(subtitleLabel)
-
-        view.addSubview(formCard)
-        formCard.addSubview(usernameField)
-        formCard.addSubview(passwordField)
-        formCard.addSubview(loginButton)
+        headerView.addSubview(titleLabel)
+        view.addSubview(usernameLabel)
+        view.addSubview(usernameField)
+        view.addSubview(usernameSeparator)
+        view.addSubview(passwordLabel)
+        view.addSubview(passwordField)
+        view.addSubview(passwordSeparator)
+        view.addSubview(errorLabel)
+        view.addSubview(loginButton)
         loginButton.addSubview(activityIndicator)
-        formCard.addSubview(errorLabel)
     }
 
     private func styleViews() {
-        view.backgroundColor = UIColor(red: 245/255, green: 246/255, blue: 250/255, alpha: 1)
+        view.backgroundColor = .white
 
         headerView.backgroundColor = .sofaLightBlue
 
-        logoContainer.backgroundColor = .white
-        logoContainer.layer.cornerRadius = 28
-        logoContainer.layer.shadowColor = UIColor.black.cgColor
-        logoContainer.layer.shadowOpacity = 0.15
-        logoContainer.layer.shadowRadius = 8
-        logoContainer.layer.shadowOffset = CGSize(width: 0, height: 4)
+        titleLabel.text = "Sofascore 2026"
+        titleLabel.font = .systemFont(ofSize: 24, weight: .bold)
+        titleLabel.textColor = .white
+        titleLabel.textAlignment = .center
 
-        logoLabel.text = "S"
-        logoLabel.font = .systemFont(ofSize: 36, weight: .black)
-        logoLabel.textColor = .sofaLightBlue
-        logoLabel.textAlignment = .center
+        setupFieldLabel(usernameLabel, text: "Username")
+        setupTextField(usernameField, placeholder: "Enter username", secure: false)
+        usernameSeparator.backgroundColor = .separator
 
-        appTitleLabel.text = "Sofascore 2026"
-        appTitleLabel.font = .systemFont(ofSize: 26, weight: .bold)
-        appTitleLabel.textColor = .white
-        appTitleLabel.textAlignment = .center
+        setupFieldLabel(passwordLabel, text: "Password")
+        setupTextField(passwordField, placeholder: "Enter password", secure: true)
+        passwordSeparator.backgroundColor = .separator
 
-        subtitleLabel.text = "Sign in to continue"
-        subtitleLabel.font = .systemFont(ofSize: 14, weight: .regular)
-        subtitleLabel.textColor = UIColor.white.withAlphaComponent(0.8)
-        subtitleLabel.textAlignment = .center
-
-        formCard.backgroundColor = .white
-        formCard.layer.cornerRadius = 16
-        formCard.layer.shadowColor = UIColor.black.cgColor
-        formCard.layer.shadowOpacity = 0.08
-        formCard.layer.shadowRadius = 12
-        formCard.layer.shadowOffset = CGSize(width: 0, height: 4)
-
-        styleTextField(usernameField, placeholder: "Username", icon: "person")
-        styleTextField(passwordField, placeholder: "Password", icon: "lock")
-        passwordField.isSecureTextEntry = true
-        passwordField.returnKeyType = .done
-        usernameField.returnKeyType = .next
-        usernameField.delegate = self
-        passwordField.delegate = self
+        errorLabel.font = .matchTime
+        errorLabel.textColor = .liveRed
+        errorLabel.numberOfLines = 0
+        errorLabel.isHidden = true
 
         loginButton.setTitle("Login", for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
-        loginButton.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
+        loginButton.titleLabel?.font = .sportSelectorTitle
         loginButton.backgroundColor = .sofaLightBlue
-        loginButton.layer.cornerRadius = 12
+        loginButton.layer.cornerRadius = 4
         loginButton.addTarget(self, action: #selector(didTapLogin), for: .touchUpInside)
 
         activityIndicator.color = .white
         activityIndicator.hidesWhenStopped = true
 
-        errorLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        errorLabel.textColor = .systemRed
-        errorLabel.textAlignment = .center
-        errorLabel.numberOfLines = 0
-        errorLabel.isHidden = true
+        usernameField.returnKeyType = .next
+        passwordField.returnKeyType = .done
+        usernameField.delegate = self
+        passwordField.delegate = self
     }
 
-    private func styleTextField(_ field: UITextField, placeholder: String, icon: String) {
+    private func setupFieldLabel(_ label: UILabel, text: String) {
+        label.text = text
+        label.font = .countryName
+        label.textColor = .secondaryText
+    }
+
+    private func setupTextField(_ field: UITextField, placeholder: String, secure: Bool) {
         field.placeholder = placeholder
-        field.font = .systemFont(ofSize: 15)
+        field.font = .teamName
         field.textColor = .primaryText
-        field.backgroundColor = UIColor(red: 245/255, green: 246/255, blue: 250/255, alpha: 1)
-        field.layer.cornerRadius = 10
-        field.layer.borderWidth = 1
-        field.layer.borderColor = UIColor(red: 220/255, green: 222/255, blue: 230/255, alpha: 1).cgColor
+        field.borderStyle = .none
         field.autocapitalizationType = .none
         field.autocorrectionType = .no
-
-        let iconView = UIImageView(image: UIImage(systemName: icon))
-        iconView.tintColor = .secondaryText
-        iconView.contentMode = .scaleAspectFit
-        let container = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 20))
-        iconView.frame = CGRect(x: 12, y: 0, width: 18, height: 20)
-        container.addSubview(iconView)
-        field.leftView = container
-        field.leftViewMode = .always
+        field.isSecureTextEntry = secure
     }
 
     private func setupConstraints() {
         headerView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(280)
+            $0.height.equalTo(180)
         }
 
-        logoContainer.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(view.safeAreaLayoutGuide).offset(32)
-            $0.size.equalTo(56)
-        }
-
-        logoLabel.snp.makeConstraints {
+        titleLabel.snp.makeConstraints {
             $0.center.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(16)
         }
 
-        appTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(logoContainer.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview().inset(24)
-        }
-
-        subtitleLabel.snp.makeConstraints {
-            $0.top.equalTo(appTitleLabel.snp.bottom).offset(6)
-            $0.leading.trailing.equalToSuperview().inset(24)
-        }
-
-        formCard.snp.makeConstraints {
-            $0.top.equalTo(headerView.snp.bottom).offset(-24)
-            $0.leading.trailing.equalToSuperview().inset(24)
+        usernameLabel.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom).offset(32)
+            $0.leading.trailing.equalToSuperview().inset(16)
         }
 
         usernameField.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(28)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(48)
+            $0.top.equalTo(usernameLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(44)
+        }
+
+        usernameSeparator.snp.makeConstraints {
+            $0.top.equalTo(usernameField.snp.bottom)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(1)
+        }
+
+        passwordLabel.snp.makeConstraints {
+            $0.top.equalTo(usernameSeparator.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview().inset(16)
         }
 
         passwordField.snp.makeConstraints {
-            $0.top.equalTo(usernameField.snp.bottom).offset(14)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(48)
+            $0.top.equalTo(passwordLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(44)
+        }
+
+        passwordSeparator.snp.makeConstraints {
+            $0.top.equalTo(passwordField.snp.bottom)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(1)
         }
 
         errorLabel.snp.makeConstraints {
-            $0.top.equalTo(passwordField.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.top.equalTo(passwordSeparator.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(16)
         }
 
         loginButton.snp.makeConstraints {
-            $0.top.equalTo(errorLabel.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.height.equalTo(50)
-            $0.bottom.equalToSuperview().inset(28)
+            $0.top.equalTo(errorLabel.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview().inset(16)
+            $0.height.equalTo(48)
         }
 
         activityIndicator.snp.makeConstraints {
@@ -184,7 +161,7 @@ final class LoginViewController: UIViewController {
         let username = usernameField.text?.trimmingCharacters(in: .whitespaces) ?? ""
         let password = passwordField.text ?? ""
         guard !username.isEmpty, !password.isEmpty else {
-            showError("Please enter your username and password.")
+            showError("Please enter username and password.")
             return
         }
         setLoading(true)
@@ -195,7 +172,7 @@ final class LoginViewController: UIViewController {
                 AppDelegate.showMain()
             } catch {
                 setLoading(false)
-                showError("Login failed. Please check your credentials.")
+                showError("Login failed. Check your credentials.")
             }
         }
     }
