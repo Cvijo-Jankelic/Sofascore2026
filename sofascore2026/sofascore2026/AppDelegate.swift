@@ -30,16 +30,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     static func showMain() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let window = appDelegate.window else { return }
         let navController = UINavigationController(rootViewController: HomeViewController())
-        UIView.transition(with: appDelegate.window!, duration: 0.35, options: .transitionCrossDissolve) {
+        UIView.transition(with: window, duration: 0.35, options: .transitionCrossDissolve) {
             appDelegate.window?.rootViewController = navController
         }
     }
 
     static func showLogin() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        UIView.transition(with: appDelegate.window!, duration: 0.35, options: .transitionCrossDissolve) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate,
+              let window = appDelegate.window else { return }
+        UIView.transition(with: window, duration: 0.35, options: .transitionCrossDissolve) {
             appDelegate.window?.rootViewController = LoginViewController()
         }
     }

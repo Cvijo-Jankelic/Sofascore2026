@@ -5,7 +5,7 @@ class HomeViewController: UIViewController {
     private let appHeaderView = AppHeaderView()
     private let sportSelectorView = SportSelectorView()
     private let tableView = UITableView(frame: .zero, style: .plain)
-    private let apiClient = APIClient()
+    private var fetchTask: Task<Void, Never>?
 
     private var selectedSport: Sport = .football {
         didSet {
@@ -80,16 +80,21 @@ class HomeViewController: UIViewController {
     private func fetchEvents(for sport: Sport) {
         sportSelectorView.updateSelection(to: sport)
         guard let token = AuthService.shared.token else { return }
-        Task {
+        fetchTask?.cancel()
+        fetchTask = Task {
             do {
-                let apiEvents = try await apiClient.fetchSecureEvents(sport: sport.slug, token: token)
-                for event in apiEvents {
-                    if let league = event.league { DatabaseManager.shared.saveLeague(league) }
-                    DatabaseManager.shared.saveEvent(event, sport: sport.slug)
+                let apiEvents = try await APIClient.shared.fetchEvents(sport: sport.slug, token: token)
+                guard !Task.isCancelled else { return }
+                Task.detached(priority: .utility) {
+                    for event in apiEvents {
+                        if let league = event.league { DatabaseManager.shared.saveLeague(league) }
+                        DatabaseManager.shared.saveEvent(event, sport: sport.slug)
+                    }
                 }
                 sections = makeSections(from: apiEvents, sport: sport)
                 tableView.reloadData()
             } catch {
+                guard !Task.isCancelled else { return }
                 print("Fetch error: \(error)")
             }
         }

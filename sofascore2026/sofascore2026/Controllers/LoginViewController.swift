@@ -3,7 +3,6 @@ import UIKit
 final class LoginViewController: UIViewController {
 
     private let loginView = LoginView()
-    private let apiClient = APIClient()
 
     override func loadView() {
         view = loginView
@@ -24,7 +23,7 @@ final class LoginViewController: UIViewController {
         loginView.setLoading(true)
         Task {
             do {
-                let response = try await apiClient.login(username: username, password: password)
+                let response = try await APIClient.shared.login(username: username, password: password)
                 AuthService.shared.save(token: response.token, username: response.name)
                 AppDelegate.showMain()
             } catch {
