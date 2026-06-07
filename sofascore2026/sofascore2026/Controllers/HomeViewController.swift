@@ -121,6 +121,8 @@ class HomeViewController: UIViewController {
 
     private func makeLeagueModel(from league: APILeague) -> LeagueModel {
         LeagueModel(
+            id: league.id,
+            seasonId: league.seasonId,
             countryName: league.country?.name ?? "",
             leagueName: league.name,
             logoUrl: league.logoUrl
@@ -137,16 +139,19 @@ class HomeViewController: UIViewController {
         }
 
         return MatchModel(
+            eventId: event.id,
             timeText: event.timeText,
             statusText: event.statusText,
+            homeTeamId: event.homeTeam.id,
             homeTeamName: event.homeTeam.name,
+            awayTeamId: event.awayTeam.id,
             awayTeamName: event.awayTeam.name,
             homeScore: event.homeScore.map { "\($0)" },
             awayScore: event.awayScore.map { "\($0)" },
             homeTeamLogoUrl: event.homeTeam.logoUrl,
             awayTeamLogoUrl: event.awayTeam.logoUrl,
             dateText: event.dateText,
-            league: event.league.map { makeLeagueModel(from: $0) } ?? LeagueModel(countryName: "", leagueName: "", logoUrl: nil),
+            league: event.league.map { makeLeagueModel(from: $0) } ?? LeagueModel(id: 0, seasonId: nil, countryName: "", leagueName: "", logoUrl: nil),
             sport: sport,
             status: status
         )
@@ -181,6 +186,12 @@ extension HomeViewController: UITableViewDelegate {
             return nil
         }
         headerView.configure(with: sections[section].league)
+        headerView.onLeagueTapped = { [weak self] in
+            guard let self, section < self.sections.count else { return }
+            let league = self.sections[section].league
+            let leagueVC = LeagueDetailViewController(league: league, sport: self.selectedSport)
+            self.navigationController?.pushViewController(leagueVC, animated: true)
+        }
         return headerView
     }
 

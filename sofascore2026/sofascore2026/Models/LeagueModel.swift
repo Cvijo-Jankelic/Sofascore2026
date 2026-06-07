@@ -4,7 +4,9 @@
 //
 //  Created by akademija on 12.03.2026..
 //
-struct LeagueModel{
+struct LeagueModel {
+    let id: Int
+    let seasonId: Int?
     let countryName: String
     let leagueName: String
     let logoUrl: String?

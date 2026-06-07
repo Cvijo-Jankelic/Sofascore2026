@@ -40,4 +40,9 @@ extension APIEvent {
     var dateText: String {
         APIEvent.dateFormatter.string(from: Date(timeIntervalSince1970: Double(startTimestamp)))
     }
+
+    var roundInfoText: String {
+        if let round = round { return "Round \(round)" }
+        return "Round"
+    }
 }

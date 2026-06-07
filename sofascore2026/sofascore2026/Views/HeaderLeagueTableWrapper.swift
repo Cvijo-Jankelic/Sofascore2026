@@ -22,6 +22,11 @@ final class HeaderLeagueTableWrapper: UITableViewHeaderFooterView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    var onLeagueTapped: (() -> Void)? {
+        get { headerLeagueView.onLeagueTapped }
+        set { headerLeagueView.onLeagueTapped = newValue }
+    }
+
     func configure(with model: LeagueModel) {
         headerLeagueView.configure(with: model)
     }
