@@ -15,9 +15,12 @@ enum MatchStatus{
 }
 
 struct MatchModel {
+    let eventId: Int
     let timeText: String
     let statusText: String
+    let homeTeamId: Int
     let homeTeamName: String
+    let awayTeamId: Int
     let awayTeamName: String
     let homeScore: String?
     let awayScore: String?

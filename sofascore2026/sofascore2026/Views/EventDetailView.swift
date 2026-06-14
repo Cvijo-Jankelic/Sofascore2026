@@ -10,7 +10,10 @@ import SnapKit
 import SofaAcademic
 
 final class EventDetailView: BaseView {
-    
+
+    var onHomeTeamTapped: (() -> Void)?
+    var onAwayTeamTapped: (() -> Void)?
+
     private let homeGroupedView = UIStackView()
     private let awayGroupedView = UIStackView()
     private let scoreLabelView = UIStackView()
@@ -79,13 +82,15 @@ final class EventDetailView: BaseView {
 
     override func setupConstraints() {
         homeGroupedView.snp.makeConstraints {
-            $0.leading.top.bottom.equalToSuperview().inset(16)
-            $0.width.equalToSuperview().dividedBy(3)
+            $0.leading.equalToSuperview().inset(16)
+            $0.top.bottom.equalToSuperview().inset(16)
+            $0.width.equalToSuperview().dividedBy(3).priority(.high)
         }
-        
+
         awayGroupedView.snp.makeConstraints {
-            $0.trailing.top.bottom.equalToSuperview().inset(16)
-            $0.width.equalToSuperview().dividedBy(3)
+            $0.trailing.equalToSuperview().inset(16)
+            $0.top.bottom.equalToSuperview().inset(16)
+            $0.width.equalToSuperview().dividedBy(3).priority(.high)
         }
         
         scoreLabelView.snp.makeConstraints {
@@ -113,22 +118,22 @@ final class EventDetailView: BaseView {
         matchDateLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(24)
-            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4)
-            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4)
+            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4).priority(.high)
+            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4).priority(.high)
         }
 
         matchTimeLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(matchDateLabel.snp.bottom).offset(4)
-            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4)
-            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4)
+            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4).priority(.high)
+            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4).priority(.high)
         }
 
         matchStatusLabel.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.top.equalTo(scoreLabelView.snp.bottom).offset(4)
-            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4)
-            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4)
+            $0.leading.greaterThanOrEqualTo(homeGroupedView.snp.trailing).offset(4).priority(.high)
+            $0.trailing.lessThanOrEqualTo(awayGroupedView.snp.leading).offset(-4).priority(.high)
         }
     }
     
@@ -219,5 +224,22 @@ final class EventDetailView: BaseView {
         homeClubImageView.contentMode = .scaleAspectFit
         awayClubImageView.contentMode = .scaleAspectFit
     }
-    
+
+    override func setupGestureRecognizers() {
+        let homeTap = UITapGestureRecognizer(target: self, action: #selector(didTapHomeTeam))
+        homeGroupedView.addGestureRecognizer(homeTap)
+        homeGroupedView.isUserInteractionEnabled = true
+
+        let awayTap = UITapGestureRecognizer(target: self, action: #selector(didTapAwayTeam))
+        awayGroupedView.addGestureRecognizer(awayTap)
+        awayGroupedView.isUserInteractionEnabled = true
+    }
+
+    @objc private func didTapHomeTeam() {
+        onHomeTeamTapped?()
+    }
+
+    @objc private func didTapAwayTeam() {
+        onAwayTeamTapped?()
+    }
 }

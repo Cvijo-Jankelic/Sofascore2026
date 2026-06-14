@@ -95,7 +95,7 @@ class HomeViewController: UIViewController {
                 tableView.reloadData()
             } catch {
                 guard !Task.isCancelled else { return }
-                print("Fetch error: \(error)")
+                showError("Failed to load events. Please try again.")
             }
         }
     }
@@ -106,12 +106,12 @@ class HomeViewController: UIViewController {
             guard let league = event.league else { return }
             let leagueId = league.id
             if let index = orderedSections.firstIndex(where: { $0.id == leagueId }) {
-                orderedSections[index].matches.append(makeMatchModel(from: event, sport: sport))
+                orderedSections[index].matches.append(event.toMatchModel(sport: sport))
             } else {
                 let section = LeagueSectionModel(
                     id: leagueId,
-                    league: makeLeagueModel(from: league),
-                    matches: [makeMatchModel(from: event, sport: sport)]
+                    league: league.toModel(),
+                    matches: [event.toMatchModel(sport: sport)]
                 )
                 orderedSections.append(section)
             }
@@ -119,37 +119,10 @@ class HomeViewController: UIViewController {
         return orderedSections
     }
 
-    private func makeLeagueModel(from league: APILeague) -> LeagueModel {
-        LeagueModel(
-            countryName: league.country?.name ?? "",
-            leagueName: league.name,
-            logoUrl: league.logoUrl
-        )
-    }
-
-    private func makeMatchModel(from event: APIEvent, sport: Sport) -> MatchModel {
-        let status: MatchStatus
-        switch event.status {
-        case .notStarted: status = .notStarted
-        case .inProgress: status = .inProgress
-        case .halfTime: status = .halfTime
-        case .finished: status = .finished
-        }
-
-        return MatchModel(
-            timeText: event.timeText,
-            statusText: event.statusText,
-            homeTeamName: event.homeTeam.name,
-            awayTeamName: event.awayTeam.name,
-            homeScore: event.homeScore.map { "\($0)" },
-            awayScore: event.awayScore.map { "\($0)" },
-            homeTeamLogoUrl: event.homeTeam.logoUrl,
-            awayTeamLogoUrl: event.awayTeam.logoUrl,
-            dateText: event.dateText,
-            league: event.league.map { makeLeagueModel(from: $0) } ?? LeagueModel(countryName: "", leagueName: "", logoUrl: nil),
-            sport: sport,
-            status: status
-        )
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 }
 
@@ -181,6 +154,12 @@ extension HomeViewController: UITableViewDelegate {
             return nil
         }
         headerView.configure(with: sections[section].league)
+        headerView.onLeagueTapped = { [weak self] in
+            guard let self, section < self.sections.count else { return }
+            let league = self.sections[section].league
+            let leagueVC = LeagueDetailViewController(league: league, sport: self.selectedSport)
+            self.navigationController?.pushViewController(leagueVC, animated: true)
+        }
         return headerView
     }
 

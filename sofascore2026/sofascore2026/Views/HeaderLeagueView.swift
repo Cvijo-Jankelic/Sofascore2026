@@ -11,6 +11,8 @@ import UIKit
 
 class HeaderLeagueView: BaseView {
 
+    var onLeagueTapped: (() -> Void)?
+
     private let logoImageView = UIImageView()
     private let ligaInfoContainer = UIView()
     private let countryLabel = UILabel()
@@ -83,10 +85,19 @@ class HeaderLeagueView: BaseView {
         }
     }
 
+    override func setupGestureRecognizers() {
+        let tap = UITapGestureRecognizer(target: self, action: #selector(didTapLeague))
+        addGestureRecognizer(tap)
+        isUserInteractionEnabled = true
+    }
+
+    @objc private func didTapLeague() {
+        onLeagueTapped?()
+    }
+
     func configure(with model: LeagueModel) {
         countryLabel.text = model.countryName
         leagueNameLabel.text = model.leagueName
-
         logoImageView.loadImage(from: model.logoUrl)
     }
 }
