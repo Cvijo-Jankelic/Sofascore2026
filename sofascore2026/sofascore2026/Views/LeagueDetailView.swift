@@ -1,3 +1,9 @@
+//
+//  LeagueDetailView.swift
+//  sofascore2026
+//
+//  Created by akademija on 4.06.2026..
+
 import UIKit
 import SnapKit
 import SofaAcademic

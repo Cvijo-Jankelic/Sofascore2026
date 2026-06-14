@@ -68,7 +68,7 @@ final class TeamDetailViewController: UIViewController {
                 teamDetailView.infoView.configure(with: teamModel)
                 teamDetailView.squadView.configure(with: playerModels)
             } catch {
-                print("Team detail fetch error: \(error)")
+                showError("Failed to load team data. Please try again.")
             }
         }
     }
@@ -83,6 +83,12 @@ final class TeamDetailViewController: UIViewController {
             venue: api.venue?.name,
             totalPlayers: nil
         )
+    }
+
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 
     private func makePlayers(from apiPlayers: [APIPlayer]) -> [PlayerModel] {

@@ -53,7 +53,7 @@ final class EventDetailViewController: UIViewController {
             self.navigationController?.pushViewController(teamVC, animated: true)
         }
 
-        eventDetailView.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 120)
+        eventDetailView.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 120)
         tableView.tableHeaderView = eventDetailView
     }
 
@@ -83,13 +83,18 @@ final class EventDetailViewController: UIViewController {
                 incidents = makeIncidentModels(from: apiIncidents)
                 tableView.reloadData()
             } catch {
-                print("Incidents fetch error: \(error)")
+                showError("Failed to load match incidents. Please try again.")
             }
         }
     }
 
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
+    }
+
     private func makeIncidentModels(from apiIncidents: [APIIncident]) -> [IncidentModel] {
-        print("📋 Incidents: \(apiIncidents.map { "\($0.type) min:\($0.minute) player:\($0.player ?? "nil")" })")
         return apiIncidents.enumerated().compactMap { index, incident in
             let id = index
             let sport = match.sport

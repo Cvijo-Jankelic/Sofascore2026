@@ -38,7 +38,9 @@ final class SportSelectorView: BaseView {
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        
+    }
+
+    override func setupGestureRecognizers() {
         footballButtonView.addTarget(self, action: #selector(didTapFootball), for: .touchUpInside)
         basketballButtonView.addTarget(self, action: #selector(didTapBasketball), for: .touchUpInside)
         americanFootballButtonView.addTarget(self, action: #selector(didTapAmericanFootball), for: .touchUpInside)

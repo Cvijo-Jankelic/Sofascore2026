@@ -1,3 +1,9 @@
+//
+//  IncidentPeriodCell.swift
+//  sofascore2026
+//
+//  Created by akademija on 5.06.2026..
+
 import UIKit
 import SnapKit
 import SofaAcademic

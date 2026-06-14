@@ -45,4 +45,46 @@ extension APIEvent {
         if let round = round { return "Round \(round)" }
         return "Round"
     }
+
+    func toMatchModel(sport: Sport, fallbackLeague: LeagueModel? = nil) -> MatchModel {
+        let status: MatchStatus
+        switch self.status {
+        case .notStarted: status = .notStarted
+        case .inProgress: status = .inProgress
+        case .halfTime:   status = .halfTime
+        case .finished:   status = .finished
+        }
+        let league = self.league?.toModel()
+            ?? fallbackLeague
+            ?? LeagueModel(id: 0, seasonId: nil, countryName: "", leagueName: "", logoUrl: nil)
+        return MatchModel(
+            eventId: self.id,
+            timeText: self.timeText,
+            statusText: self.statusText,
+            homeTeamId: self.homeTeam.id,
+            homeTeamName: self.homeTeam.name,
+            awayTeamId: self.awayTeam.id,
+            awayTeamName: self.awayTeam.name,
+            homeScore: self.homeScore.map { "\($0)" },
+            awayScore: self.awayScore.map { "\($0)" },
+            homeTeamLogoUrl: self.homeTeam.logoUrl,
+            awayTeamLogoUrl: self.awayTeam.logoUrl,
+            dateText: self.dateText,
+            league: league,
+            sport: sport,
+            status: status
+        )
+    }
+}
+
+extension APILeague {
+    func toModel() -> LeagueModel {
+        LeagueModel(
+            id: self.id,
+            seasonId: self.seasonId,
+            countryName: self.country?.name ?? "",
+            leagueName: self.name,
+            logoUrl: self.logoUrl
+        )
+    }
 }

@@ -1,3 +1,9 @@
+//
+//  LeagueStandingsView.swift
+//  sofascore2026
+//
+//  Created by akademija on 4.06.2026..
+
 import UIKit
 import SnapKit
 import SofaAcademic
@@ -22,7 +28,7 @@ final class LeagueStandingsView: BaseView {
         tableView.rowHeight = 48
 
         let header = StandingHeaderView()
-        header.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 48)
+        header.frame = CGRect(x: 0, y: 0, width: 0, height: 48)
         tableView.tableHeaderView = header
 
         tableView.register(StandingTableViewCell.self, forCellReuseIdentifier: StandingTableViewCell.reuseIdentifier)

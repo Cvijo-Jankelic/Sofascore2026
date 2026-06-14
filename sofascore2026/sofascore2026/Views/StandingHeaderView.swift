@@ -2,8 +2,6 @@ import UIKit
 import SnapKit
 import SofaAcademic
 
-// Figma: Standings/Football/Standings Cell Head — 360×48
-// Columns must align pixel-perfect with StandingRowCell body columns.
 final class StandingHeaderView: BaseView {
 
     private let hashLabel = UILabel()     // "#"
@@ -54,21 +52,18 @@ final class StandingHeaderView: BaseView {
     }
 
     override func setupConstraints() {
-        // Left zone — mirrors body: position(w=24) + logo(16) gap
-        // "#" aligns with position badge center (body: leading=8 w=24 → center x=20)
+        
         hashLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(8)
             $0.centerY.equalToSuperview()
             $0.width.equalTo(24)
         }
 
-        // "Team" aligns with teamNameLabel in body (body: leading = logo.trailing+8 = 40+16+8 = 64)
         teamLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(64)
             $0.centerY.equalToSuperview()
         }
 
-        // Stats columns — IDENTICAL chain to StandingRowCell (trailing anchor)
         ptsLabel.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(8)
             $0.centerY.equalToSuperview()

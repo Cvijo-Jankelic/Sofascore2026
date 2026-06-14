@@ -77,7 +77,7 @@ final class LeagueDetailViewController: UIViewController {
                 leagueDetailView.matchesView.configure(with: matchSections)
                 leagueDetailView.standingsView.configure(with: standingRows)
             } catch {
-                print("League detail fetch error: \(error)")
+                showError("Failed to load league data. Please try again.")
             }
         }
     }
@@ -86,7 +86,7 @@ final class LeagueDetailViewController: UIViewController {
         var roundsDict: [(key: String, matches: [MatchModel])] = []
         for event in events {
             let round = event.roundInfoText
-            let match = makeMatchModel(from: event)
+            let match = event.toMatchModel(sport: sport, fallbackLeague: league)
             if let idx = roundsDict.firstIndex(where: { $0.key == round }) {
                 roundsDict[idx].matches.append(match)
             } else {
@@ -114,36 +114,10 @@ final class LeagueDetailViewController: UIViewController {
         }
     }
 
-    private func makeMatchModel(from event: APIEvent) -> MatchModel {
-        let status: MatchStatus
-        switch event.status {
-        case .notStarted: status = .notStarted
-        case .inProgress: status = .inProgress
-        case .halfTime:   status = .halfTime
-        case .finished:   status = .finished
-        }
-
-        let leagueModel = event.league.map {
-            LeagueModel(id: $0.id, seasonId: $0.seasonId, countryName: $0.country?.name ?? "", leagueName: $0.name, logoUrl: $0.logoUrl)
-        } ?? league
-
-        return MatchModel(
-            eventId: event.id,
-            timeText: event.timeText,
-            statusText: event.statusText,
-            homeTeamId: event.homeTeam.id,
-            homeTeamName: event.homeTeam.name,
-            awayTeamId: event.awayTeam.id,
-            awayTeamName: event.awayTeam.name,
-            homeScore: event.homeScore.map { "\($0)" },
-            awayScore: event.awayScore.map { "\($0)" },
-            homeTeamLogoUrl: event.homeTeam.logoUrl,
-            awayTeamLogoUrl: event.awayTeam.logoUrl,
-            dateText: event.dateText,
-            league: leagueModel,
-            sport: sport,
-            status: status
-        )
+    private func showError(_ message: String) {
+        let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true)
     }
 
     override func viewWillAppear(_ animated: Bool) {

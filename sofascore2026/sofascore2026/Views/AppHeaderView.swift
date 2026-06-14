@@ -53,6 +53,7 @@ final class AppHeaderView: BaseView {
                 $0.leading.equalToSuperview().inset(16).priority(.high)
                 $0.centerY.equalToSuperview()
                 $0.height.equalTo(20)
+                $0.width.lessThanOrEqualTo(120)
             }
             
             buttonStack.snp.makeConstraints{

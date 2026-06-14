@@ -1,3 +1,9 @@
+//
+//  IncidentCell.swift
+//  sofascore2026
+//
+//  Created by akademija on 5.06.2026..
+
 import UIKit
 import SnapKit
 import SofaAcademic
@@ -7,9 +13,9 @@ final class IncidentCell: BaseView {
     private let iconImageView = UIImageView()
     private let minuteLabel = UILabel()
     private let divider = UIView()
-    private let scoreLabel = UILabel()    // goal score "1 - 0"  (side-by-side with player)
-    private let primaryLabel = UILabel()  // player name / primary text
-    private let secondaryLabel = UILabel() // description / secondary text (default cells only)
+    private let scoreLabel = UILabel()
+    private let primaryLabel = UILabel()
+    private let secondaryLabel = UILabel()
 
     override func addViews() {
         addSubview(iconImageView)
@@ -45,8 +51,6 @@ final class IncidentCell: BaseView {
     }
 
     override func setupConstraints() {
-        // All views get complete initial constraints — no ambiguity on first render.
-        // applyHomeLayout / applyAwayLayout remakeConstraints on each configure call.
         applyHomeLayout(isGoal: false)
     }
 
@@ -85,28 +89,28 @@ final class IncidentCell: BaseView {
             applyAwayLayout(isGoal: false)
 
         case let .redCardHome(playerName, minute, description):
-            iconImageView.image = UIImage(named: "ic_card_red")
+            iconImageView.image = UIImage(systemName: "rectangle.fill")?.withTintColor(.liveRed, renderingMode: .alwaysOriginal)
             minuteLabel.text = "\(minute)′"
             primaryLabel.text = playerName
             secondaryLabel.text = description
             applyHomeLayout(isGoal: false)
 
         case let .redCardAway(playerName, minute, description):
-            iconImageView.image = UIImage(named: "ic_card_red")
+            iconImageView.image = UIImage(systemName: "rectangle.fill")?.withTintColor(.liveRed, renderingMode: .alwaysOriginal)
             minuteLabel.text = "\(minute)′"
             primaryLabel.text = playerName
             secondaryLabel.text = description
             applyAwayLayout(isGoal: false)
 
         case let .defaultHome(playerName, description, minute):
-            iconImageView.image = UIImage(named: "ic_ball_football")
+            iconImageView.image = defaultIcon(for: model.sport)
             minuteLabel.text = "\(minute)′"
             primaryLabel.text = playerName
             secondaryLabel.text = description
             applyHomeLayout(isGoal: false)
 
         case let .defaultAway(playerName, description, minute):
-            iconImageView.image = UIImage(named: "ic_ball_football")
+            iconImageView.image = defaultIcon(for: model.sport)
             minuteLabel.text = "\(minute)′"
             primaryLabel.text = playerName
             secondaryLabel.text = description
@@ -119,20 +123,7 @@ final class IncidentCell: BaseView {
 
     // MARK: - Layout
 
-    // Figma: cell 360×56
-    // Home zone (left): icon x=16 y=8 24×24 | minute x=8 y=32 40×16 | divider x=55 y=8 1×40
-    // Away zone (right): icon x=320 y=8 24×24 | minute x=312 y=32 40×16 | divider x=304 y=8 1×40
-    //
-    // Goal layout — score + player side-by-side (both centerY):
-    //   Home: score x=64 w≈64, player x=156 w=188 trailing=16
-    //   Away: player x=16 w=188, score trailing x=296 w≈84
-    //
-    // Default layout — primary (y=12) + secondary (y=28) stacked:
-    //   Home: both leading=68 (divider.trailing+12), trailing=16
-    //   Away: both leading=16, trailing=divider.leading-12
-
     private func applyHomeLayout(isGoal: Bool) {
-        // --- Left zone ---
         iconImageView.snp.remakeConstraints {
             $0.leading.equalToSuperview().inset(16)
             $0.top.equalToSuperview().inset(8)
@@ -151,7 +142,6 @@ final class IncidentCell: BaseView {
         }
 
         if isGoal {
-            // Score + player side-by-side, both vertically centered
             scoreLabel.isHidden = false
             secondaryLabel.isHidden = true
 
@@ -172,7 +162,6 @@ final class IncidentCell: BaseView {
                 $0.width.equalTo(0)
             }
         } else {
-            // Primary (top) + secondary (bottom) stacked
             scoreLabel.isHidden = true
             secondaryLabel.isHidden = false
 
@@ -197,7 +186,6 @@ final class IncidentCell: BaseView {
     }
 
     private func applyAwayLayout(isGoal: Bool) {
-        // --- Right zone ---
         iconImageView.snp.remakeConstraints {
             $0.trailing.equalToSuperview().inset(16)
             $0.top.equalToSuperview().inset(8)
@@ -216,7 +204,6 @@ final class IncidentCell: BaseView {
         }
 
         if isGoal {
-            // Player (left) + score (right), both vertically centered
             scoreLabel.isHidden = false
             secondaryLabel.isHidden = true
 
@@ -267,12 +254,20 @@ final class IncidentCell: BaseView {
         switch sport {
         case .basketball:
             switch scoreDiff {
-            case 2: return UIImage(named: "ic_basketball_2")
-            case 3: return UIImage(named: "ic_basketball_3")
-            default: return UIImage(named: "goal_point")
+            case 2: return UIImage(named: "2")
+            case 3: return UIImage(named: "3")
+            default: return UIImage(named: "basketball") 
             }
         default:
             return UIImage(named: "goal_point")
+        }
+    }
+
+    private func defaultIcon(for sport: Sport) -> UIImage? {
+        switch sport {
+        case .basketball: return UIImage(named: "basketball")
+        case .americanFootball: return UIImage(named: "amfootball")
+        default: return UIImage(named: "goal_point")
         }
     }
 }

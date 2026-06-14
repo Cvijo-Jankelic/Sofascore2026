@@ -5,7 +5,7 @@
 //  Created by akademija on 21.03.2026..
 //
 
-enum Sport: Int, CaseIterable {
+enum Sport {
     case football
     case basketball
     case americanFootball

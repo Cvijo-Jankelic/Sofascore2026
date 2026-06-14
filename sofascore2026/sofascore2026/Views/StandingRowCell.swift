@@ -50,11 +50,6 @@ final class StandingRowCell: BaseView {
     }
 
     override func setupConstraints() {
-        // Figma: cell 360×48
-        // Left zone: position(x=8 w=24) → logo(x=40 w=16) → teamName(x=64 → flexible)
-        // Right zone (anchored from trailing):
-        //   pts(trailing=8 w=24) ← L(w=24) ← D(w=24) ← W(w=24) ← P(w=24)
-        //   spacing 8pt between each column
 
         positionLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().inset(8)
@@ -68,7 +63,6 @@ final class StandingRowCell: BaseView {
             $0.size.equalTo(16)
         }
 
-        // Stats columns — chain from trailing edge
         pointsLabel.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(8)
             $0.centerY.equalToSuperview()
@@ -99,7 +93,6 @@ final class StandingRowCell: BaseView {
             $0.width.equalTo(24)
         }
 
-        // Team name fills remaining space between logo and stats
         teamNameLabel.snp.makeConstraints {
             $0.leading.equalTo(teamImageView.snp.trailing).offset(8)
             $0.trailing.lessThanOrEqualTo(playedLabel.snp.leading).offset(-8)
